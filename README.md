@@ -1,6 +1,11 @@
 <h1>Treinamentos básicos e manuais de apoio 📋🤓</h1> 
 
-→ Espaço dedicado para auxiliar na lógica da programação e estrutura de linguagens como o Java, JS e Python, além de oferecer suporte sobre a ferrramenta de versionamento Git, discorrendo sobre o que é e como funciona.
+→ Espaço dedicado para auxiliar na lógica da programação e estrutura de linguagens como o Python, JS e Java, além de oferecer suporte sobre a ferrramenta de versionamento Git, discorrendo sobre o que ele é e como ele funciona.
+
+🆕 Atualmente desenvolvendo a branch [games](https://github.com/Goestoso/learning/edit/games)!
+<br>
+<br>
+🗞️ Em breve tópicos sobre a lógica de programação e a estrutrua das linguagens Python, JS e Java...
 
 <h2>😼 Git</h2>
 
@@ -309,16 +314,32 @@ git remote add origin https://github.com/usuario/repositorio.git
 > `fetch`: Usada para obter (fetch) dados do repositório remoto, quando você executa ___git fetch___ ou ___git pull___, o Git usa esta URL para baixar `commits`, `branches` e `tags` do repositório remoto para o seu repositório local.
 > <br>
 > `push`: Usada para enviar (push) seus `commits` do repositório local para o repositório remoto, quando você executa ___git push___, o Git usa esta URL para transferir seus `commits` para o repositório remoto.
-- Listar as URLs de fetch e push configuradas para seu repositório remoto:
+- Listar as URLs de `fetch` e `push` configuradas para seu repositório remoto:
 ```
 git remote -v
+```
+- Renomear as referências de `fetch` e `push` (conhecidas como referências `remote`):
+```
+git remote rename learning origin
+```
+- Alterar a refrência de `fetch`:
+```
+git remote set-url origin [NEW_FETCH_URL]
+```
+- Alterar a referência de `push`:
+```
+git remote set-url --push origin [NEW_PUSH_URL]
 ```
 
 - Branch Remota: Uma branch remota é uma branch que existe no repositório remoto (como GitHub) e é usada para compartilhar mudanças com outros colaboradores e manter o código sincronizado entre diferentes desenvolvedores.
 > Ver Branches Remotas: ```git branch -r```
+> <br>
 > Sincronizar Branches Locais com Branches Remotas: ```git fetch```
+> <br>
 > Para criar uma cópia local de uma branch remota: ```git checkout -b nome_da_branch_local origin/nome_da_branch_remota```
+> <br>
 > Verificar todas as branches (locais e remotas): ```git branch -a```
+> <br>
 > Deletar uma branch remota: ```git push origin --delete nome_da_branch```
 
 <h5>🔖 Tags</h5>
