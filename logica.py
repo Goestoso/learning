@@ -1,11 +1,16 @@
 """Lógica básica do Python"""
 
-# variável nome é um elemento que recebe algum valor específico 
+# variável nome é um elemento que recebe algum valor específico (respeita o snake-case)
 nome = input("Digite um nome:") # built-in function (função interna do python) input() que congela a execução do código aguardando um valor de entrada no terminal (prompt)
-print("O nome é " + nome) # print imprime uma saída textual no terminal
-idade = int(input("Digite uma idade:")) # input retorna str, precisa converter (realizar casting) para int, logo use a built-in function int() 
-print("Tem " + str(idade) + " anos") # Só é possível concatenar str com str, precisa realizar casting de idade para str usando function str()
+print("O nome é " + nome) # print imprime uma saída textual no terminal, '+' concatena textos
+idade = int(input("Digite uma idade:")) # input retorna texto, precisa converter (realizar casting) para inteiro, logo use a built-in function int() 
+print("Tem " + str(idade) + " anos") # Só é possível concatenar texto com texto, logo precisa realizar casting de idade para texto usando function str()
 
+
+"""
+Operadores lógicos: > → maior, < → menor, >= → maior e igual, <= → menor e igual, == → igual e not → não.
+Operadores booleanos: and → SOMENTE se uma condição satisfaz E outra condição TAMBÉM satisfaz, or → se uma condição satisfaz OU outra condição satisfaz
+"""
 
 """Condicionais"""
 # se idade maior que 18
@@ -25,7 +30,7 @@ else:
 """Loops"""
 print("Vou soletrar seu nome:")
 # para cada index e letra na enumeração de nome # for
-for index, letra in enumerate(nome): # enumera as letras do nome
+for index, letra in enumerate(nome): # enumera as letras do nome, # o uso do '''in''' é para sinalizar a iteração de cada elemento '''em''' um iterável
     # bloco de código do loop for
     print("Posição " + str(index) + ": " + letra)
     
@@ -39,11 +44,11 @@ for i in range(11): # itera um intervalo, no qual 0 <= x < 10, ou seja, um inter
     
 # while
 continua = True # sinalizador de verificação do loop
-# Enquanto continua for verdadeiro
+# Enquanto continua for True
 while(continua): 
     # bloco de código do loop while
     resposta = input("Quer continuar(S/N)?\n") # a variável resposta recebe um valor digitado 
-    continua = True if resposta == 'S' else False # Ternário, continua recebe True se resposta for 'S', senão continua recebe False
+    continua = True if resposta == 'S' else False # Ternário, continua recebe True (verdadeiro) se resposta for 'S', senão continua recebe False (falso)
     
 count = 10 # delimitador
 print("Vou contar de 10 a 0:")
