@@ -12,10 +12,19 @@ n_caracteres = len(texto) # captura a quantidade de caracteres
 """Interpolação de strings"""
 # Usando interpolação, não há a necessidade de converter as variáveis, pois a interpolação faz um casting automático
 print("{} tem {} caracteres.".format(texto, n_caracteres)) # cada {} representa os locais da interpolação, que ocorrerá na ordem de variáveis passadas para o método .format().
+"""f-strings"""
 print(f"Soletrando o texto {texto}:") # cada {} pode ser preenchido com uma variável, o Python automaticamenbte fará a interpolação.
 for index, char in enumerate(texto): # a built-in function enumera qualquer tipo de iterável e permite acessar a posição index de cada elemento
     print(f"Na posição {index}: {char}")
-outro_texto = "7 = sorte, 6 = azar"    
+outro_texto = "7 = sorte, 6 = azar"
+dizima_periodica:float = 2/3 # isso vai resultar numa dízima periódica 0,6666...
+print(f"{dizima_periodica} é uma dízima periódica.")
+# usando formatação de type f (float) 
+print(f"{dizima_periodica:.2f} é a dízima perídica considerando 2 casas depois da vírgula.") # :.xf (x = qualquer int) para formatar um número x de casas depois da vírgula. 
+x = 123.456
+print(f"{x} é o valor d x, {x:7.2f} é o valor de x com 7 caracteres de largura (espaçamento) e duas casas depois da vírgula.") # :x.f (x = qualquer int) para formatar x caracteres de largura. 
+x = 2 
+print(f"{x} é o valor de x, {x:02d} é valor de x com um zero à esquerda.") # :0xd (x = qualquer int) para formatar um número com x 0s à esquerda.
 for char in outro_texto:
     if char.isnumeric(): print(f"{char} é número.") # verifica se é número
     elif char.isalpha(): print(f"{char} é letra.") # verifica se é do alfabeto
