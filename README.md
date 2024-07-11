@@ -2,7 +2,17 @@
 
 → Espaço dedicado para auxiliar na lógica da programação e estrutura de linguagens como o Python, JS e Java, além de oferecer suporte sobre a ferrramenta de versionamento Git, discorrendo sobre o que ele é e como ele funciona.
 
+<div style="display: flex; justify-content: center; gap: 20px;">
+<figure style="margin-right: 20px;">
+  <img align="center" alt="Goes-Python" height="100" width="60" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original-wordmark.svg"  >
+   <figcaption><b>Aproveite  os arquivos <code>.py</code> para estudar sobre o Python!</b></figcaption>
+</figure>
+</div> 
+
 🆕 Atualmente desenvolvendo a branch [games](https://github.com/Goestoso/learning/edit/games)!
+<br>
+<br>
+🆕 Elaborando códigos em `Python` para auxiliar na aprendizagem!
 <br>
 <br>
 🗞️ Em breve tópicos sobre a lógica de programação e a estrutrua das linguagens Python, JS e Java...
