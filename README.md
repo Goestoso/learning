@@ -55,6 +55,42 @@
 - `dev` e `feature` são `branches` filhas criadas a partir da `master` que possuem seus respectivos `commits`.
 - Nas `branches` filhas você pode fazer todas as alterações necessárias sem afetar o código existente na branch principal `master`.
 
+> Os ponteiros dos commits:
+```
+        +--------------------+
+        |     Repositório    |
+        +--------------------+
+                |
+                v
+        +--------------------+
+        |       HEAD         | 
+        +--------------------+
+                |
+                v
+        +--------------------+
+        |     master         |
+        | (current branch)   |
+        +--------------------+
+                |
+                v
+        +--------------------+
+        |    Commit C        |
+        +--------------------+
+                |
+                v
+        +--------------------+
+        |    Commit B        |
+        +--------------------+
+                |
+                v
+        +--------------------+
+        |    Commit A        |
+        +--------------------+
+
+```
+
+- `HEAD` é um ponteiro que sempre aponta para o `commit` mais recente na `branch` atual (`master` neste caso).
+
 <h3>Como o Git funciona?</h3>
 
 - O Git rastreia as alterações em arquivos e mantém um histórico completo de todas as modificações.
@@ -309,6 +345,15 @@ git rebase branch_destino
 > Para que Serve o Rebase?
 - ___Manter um Histórico Linear___: Ajuda a manter um histórico de commits limpo e linear, facilitando a revisão de código e a identificação de mudanças específicas.
 - ___Facilitar a Revisão de Código___: Reduz a poluição do histórico com commits de merge, tornando mais claro quem fez o que e quando.
+
+> Iniciar um rebase interativo navegando pelos 3 últimos commits:
+```
+git rebase -i HEAD~3
+```
+> Iniciar um rebase interativo navegando para um commit específico:
+```
+git rebase -i <commit_hash>
+```
 
 <h4>👨‍💻 Colaboração remota</h4>
 
