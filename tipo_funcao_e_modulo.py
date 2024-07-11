@@ -19,7 +19,7 @@ Ex: logica.py é um módulo da biblioteca learning
 from random import random  # o módulo random é usado para gerar números pseudoaleatórios e realizar seleções aleatórias.
 
 # para chamar uma função usa-se os "()"
-aleatorio = random() # aleatorio irá receber da função random um número aleatório do tipo float entre 0 e 1... 
+aleatorio:float = random() # aleatorio irá receber da função random um número aleatório do tipo float entre 0 e 1... # usando typing float para facilitar legibilidade
 print(aleatorio)
 aleatorio = int(random()) # não vai adiantar realizar casting de aleatorio, pois a parte inteira dele é o 0
 print(aleatorio) # saída será '0'
@@ -42,7 +42,7 @@ def minha_funcao(): # função minha_funcao (respeita o snake-case)
 minha_funcao() # para chamar as funções personalizadas, nesse caso minha_funcao não fará e nem retornará nada pois ela não possui nenhum conteúdo exceto o pass
 
 # exemplo de função que recebe dois parâmetros e retorna um valor
-def soma_dois_valores(x, y): 
+def soma_dois_valores(x:int, y:int):  # Para facilitar a leitura, podemos usar typing do Python para demonstrar ao dev qual tipo de variável essa função espera
     return x + y # return para declarar que a função retorna algum valor
 
 # x e y são variáveis globais, acessíveis em qualquer bloco de código dentro do módulo após serem declaradas
