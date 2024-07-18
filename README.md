@@ -174,6 +174,10 @@ git checkout <commit_hash>
 ```
 git reset --hard <commit_hash>
 ```
+> Resetar o Índice do Commit para um Commit Específico (sem resetar o repositório):
+```
+git reset --soft <commit_hash>
+```
 > Criar uma Nova Branch a Partir de um Commit Específico:
 ```
 git checkout -b nome_da_branch <commit_hash>
@@ -229,6 +233,10 @@ git log --oneline --grep="correção de bug"
 ```
 git log --since="2 weeks ago"
 ```
+> Histórico de todos os movimentos do HEAD (cada estado é marcado no formato HEAD@{_n_})
+```
+git reflog
+```
 - ___Branches:___ Criar ramificações para desenvolver recursos separadamente.
 > Para listar todas as ramificações (branches):
 ```
@@ -242,7 +250,7 @@ git branch <nome_da_branch>
 ```
 git checkout <nome_da_branch>
 ```
-> Para criar uma nova branc e mudar para essa nova branch:
+> Para criar uma nova branch e mudar para essa nova branch:
 ```
 git checkout -b <nome_da_branch>
 ```
@@ -353,6 +361,48 @@ git rebase -i HEAD~3
 > Iniciar um rebase interativo navegando para um commit específico:
 ```
 git rebase -i <commit_hash>
+```
+> Opções do rebase interativo:
+
+- `pick` ou `p`: Manter o commit como está
+
+```
+pick 1a2b3c4 Mensagem do commit
+```
+
+- `reword` ou `r`: Usar o commit, mas permite editar a mensagem do commit.
+
+```
+reword 1a2b3c4 Mensagem antiga do commit
+```
+
+- `edit` ou `e`: Usar o commit, mas parar para fazer alterações manuais.
+
+```
+edit 1a2b3c4 Mensagem do commit
+```
+- `squash` ou `s`: Mesclar este commit com o commit anterior e permitir editar a mensagem combinada.
+
+```
+squash 1a2b3c4 Mensagem do commit
+```
+
+- `fixup` ou `f`: Mesclar este commit com o commit anterior sem editar a mensagem.
+
+```
+fixup 1a2b3c4 Mensagem do commit
+```
+
+- `exec` ou `x`: Executar um comando shell.
+
+```
+exec echo "Este é um comando shell"
+```
+
+- `drop` ou `d`: Remover o commit da história.
+
+```
+drop 1a2b3c4 Mensagem do commit
 ```
 
 <h4>👨‍💻 Colaboração remota</h4>
