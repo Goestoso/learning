@@ -4,18 +4,11 @@
 import random
 import tkinter
 import time
+from pathlib import Path
 
-def play():
+def play(): #função principal do jogo
     welcome()
-   
-    print("\nLoading secret word...")
-    time.sleep(1)
-    print("3")
-    time.sleep(1)
-    print("2")
-    time.sleep(1)
-    print("1\n")
-    time.sleep(1)
+    load_secret_word()
 
     words = load_words()
     secret_word = random.choice(words)
@@ -27,23 +20,25 @@ def play():
 
     close_or_again = '' 
     while True:
-        close_or_again = input('Close game or start again?')
-        if close_or_again == ("Again"):
+        close_or_again = input('Options: \n- Try again (type Again)\n- Go back to beginning (type Back)\nChoose an option: ').upper()
+        if close_or_again == ("AGAIN"):
+            load_secret_word()
             time.sleep(2)
+            secret_word = random.choice(words)
+            start_game(secret_word)
+        elif close_or_again == ("BACK"):
+            print("\nReturning to the main menu...\n")
+            time.sleep(1)
             play()
-            break
-        elif close_or_again == ("Close"):
-         print("\nThank you very much for playing")
-         print("See you later")
-         break
-        
         else:
-            print('Please, enter "Start" or "Close"\n ')
+            print('Please, enter "Again" or "Back"\n ')
 
-def load_words():
+def load_words(): #carrega as palavras do arquivo words na lista words
+    base_dir = Path(__file__).resolve().parent.parent  # volta ao diretório raiz do projeto
+    file_path = base_dir / 'data' / 'words.txt' #concatena com o diretório que contém o arquivo words
     words = []
     try:
-        with open("words.txt", "r") as file:
+        with open(file_path, "r") as file:
             words = [line.strip() for line in file.readlines()]
     except Exception as error:
         print(f'Error: {error}')
@@ -51,36 +46,62 @@ def load_words():
     
     return words
 
-def start_game(secret_word):
+def load_secret_word(): #função que mostra que uma nova palavra secreta está sendo carregada
+    print("\nLoading secret word...")
+    time.sleep(1)
+    print("3")
+    time.sleep(1)
+    print("2")
+    time.sleep(1)
+    print("1\n")
+    time.sleep(1)
+
+def start_game(secret_word): #função para as partidas do jogo
     # Mostrar a palavra com underscores
+    attempted_letters = set() #conjunto para armazenar letras que já foram usadas
+    attempted_words = set() #para palavras já usadas
     guessed_word = ['_'] * len(secret_word)
     print(f'The secret word: {" ".join(guessed_word)}')
-
     attempts = 6  # O jogador tem 6 tentativas
     while attempts > 0:
         guess = input("\nGuess a letter or the whole word: ").lower()
-
         # Verificar se o jogador adivinhou a palavra inteira
         if len(guess) == len(secret_word) and guess.isalpha():
-            if guess == secret_word:
-                print("\ncongratulations! You guess the secret word!")
+            if guess in attempted_words:
+                print(f'\nThe word "{guess}" has already been tried, try another guess!')
+            elif guess == secret_word:
+                print("\nCongratulations! You guess the secret word!")
                 break
             else:
-                print("incorrect guesses. Try again.")
+                attempted_words.add(guess)
+                print("Incorrect guess. Try again.")
                 print(f"Do you still have {attempts} attempts.")
                 attempts -= 1
         # Verificar se o jogador adivinhou uma letra
         elif len(guess) == 1 and guess.isalpha():
-            if guess in secret_word:
-                print(f'\nThe letter "{guess}" está correta!')
+            if guess in attempted_letters:
+                print(f'\nThe letter "{guess}" has already been tried, try another guess!')
+            elif guess in secret_word:
+                print(f'\nThe letter "{guess}" is correct!')
                 for i in range(len(secret_word)):
                     if secret_word[i] == guess:
                         guessed_word[i] = guess
                 if '_' not in guessed_word:
-                    print("congratulations! You guess the secret word!")
+                    print("Congratulations! You guess the secret word!")
+                    print("       ___________      ")
+                    print("      '._==_==_=_.'     ")
+                    print("      .-\\:      /-.    ")
+                    print("     | (|:.     |) |    ")
+                    print("      '-|:.     |-'     ")
+                    print("        \\::.    /      ")
+                    print("         '::. .'        ")
+                    print("           ) (          ")
+                    print("         _.' '._        ")
+                    print("        '-------'       ")
                     break
             else:
-                print(f'\nThe Letter "{guess}" do not is in word.')
+                attempted_letters.add(guess)
+                print(f'\nThe letter "{guess}" is not in th secret word.')
                 print(f"Do you still have {attempts} attempts.")
                 attempts -= 1
 
@@ -98,9 +119,25 @@ def start_game(secret_word):
 
     if attempts == 0:
         print(f'You lose! The word was: "{secret_word}"')
+        print("    _______________         ")
+        print("   /               \\       ")
+        print("  /                 \\     ")
+        print("//                   \\/\\  ")
+        print("\\|   XXXX     XXXX   | /   ")
+        print(" |   XXXX     XXXX   |/     ")
+        print(" |   XXX       XXX   |      ")
+        print(" |                   |      ")
+        print(" \\__      XXX      __/     ")
+        print("   |\\     XXX     /|       ")
+        print("   | |           | |        ")
+        print("   | I I I I I I I |        ")
+        print("   |  I I I I I I  |        ")
+        print("   \\_             _/       ")
+        print("     \\_         _/         ")
+        print("       \\_______/           ")
 
 
-def welcome():
+def welcome(): #função de abertura do jogo
     print("*************************************")
     print("***********Welcome to Guess**********")
     print("*************************************")
@@ -153,5 +190,5 @@ def welcome():
             time.sleep(4)
             welcome()
 
-if(__name__ == "__main__"):
+if(__name__ == "__main__"): #contexto de execução do programa
     play()
