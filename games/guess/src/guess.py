@@ -16,11 +16,10 @@ def play(): #função principal do jogo
 
     start_game(secret_word)
 
-    print("\nWhat do you want to do? \n")
-
     close_or_again = '' 
     while True:
-        close_or_again = input('Options: \n- Try again (type Again)\n- Go back to beginning (type Back)\nChoose an option: ').upper()
+        print("\nWhat do you want to do? \n")
+        close_or_again = input('Options: \n\n- Try again (type Again)\n\n- Go back to beginning (type Back)\n\nChoose an option: ').upper()
         if close_or_again == ("AGAIN"):
             load_secret_word()
             time.sleep(2)
@@ -67,11 +66,11 @@ def start_game(secret_word): #função para as partidas do jogo
         guess = input("\nGuess a letter or the whole word: ").lower()
         # Verificar se o jogador adivinhou a palavra inteira
         if len(guess) == len(secret_word) and guess.isalpha():
-            if guess in attempted_words:
-                print(f'\nThe word "{guess}" has already been tried, try another guess!')
-            elif guess == secret_word:
-                print("\nCongratulations! You guess the secret word!")
+            if guess == secret_word:
+                end_match(True)
                 break
+            elif guess in attempted_words:
+                print(f'\nThe word "{guess}" has already been tried, try another guess!')
             else:
                 attempted_words.add(guess)
                 print("Incorrect guess. Try again.")
@@ -83,30 +82,21 @@ def start_game(secret_word): #função para as partidas do jogo
                 print(f'\nThe letter "{guess}" has already been tried, try another guess!')
             elif guess in secret_word:
                 print(f'\nThe letter "{guess}" is correct!')
+                attempted_letters.add(guess)
                 for i in range(len(secret_word)):
                     if secret_word[i] == guess:
                         guessed_word[i] = guess
                 if '_' not in guessed_word:
-                    print("Congratulations! You guess the secret word!")
-                    print("       ___________      ")
-                    print("      '._==_==_=_.'     ")
-                    print("      .-\\:      /-.    ")
-                    print("     | (|:.     |) |    ")
-                    print("      '-|:.     |-'     ")
-                    print("        \\::.    /      ")
-                    print("         '::. .'        ")
-                    print("           ) (          ")
-                    print("         _.' '._        ")
-                    print("        '-------'       ")
+                    end_match(True)
                     break
             else:
                 attempted_letters.add(guess)
                 print(f'\nThe letter "{guess}" is not in th secret word.')
-                print(f"Do you still have {attempts} attempts.")
+                print(f"\nDo you still have {attempts} attempts.")
                 attempts -= 1
 
         elif len(guess) >= 2:
-            print("Input just one letter")
+            print("Input just one letter or the whole word")
             #attempts -= 1
 
         elif not guess.isalpha():
@@ -118,31 +108,15 @@ def start_game(secret_word): #função para as partidas do jogo
         print(f"\nThe word: {' '.join(guessed_word)}")
 
     if attempts == 0:
-        print(f'You lose! The word was: "{secret_word}"')
-        print("    _______________         ")
-        print("   /               \\       ")
-        print("  /                 \\     ")
-        print("//                   \\/\\  ")
-        print("\\|   XXXX     XXXX   | /   ")
-        print(" |   XXXX     XXXX   |/     ")
-        print(" |   XXX       XXX   |      ")
-        print(" |                   |      ")
-        print(" \\__      XXX      __/     ")
-        print("   |\\     XXX     /|       ")
-        print("   | |           | |        ")
-        print("   | I I I I I I I |        ")
-        print("   |  I I I I I I  |        ")
-        print("   \\_             _/       ")
-        print("     \\_         _/         ")
-        print("       \\_______/           ")
-
+        print(f'\nYou lose! The word was: "{secret_word}"')
+        end_match(False)
 
 def welcome(): #função de abertura do jogo
     print("*************************************")
     print("***********Welcome to Guess**********")
     print("*************************************")
     
-    print("\nWhat do you want to do? ") 
+    print("\nWhat do you want to do?") 
     print("\nOption 1: Start new game")
     print("Option 2: Quit")
     print("Option 3: Help")
@@ -189,6 +163,37 @@ def welcome(): #função de abertura do jogo
             print("\n🔹 Good luck and have fun! 🚀\n")
             time.sleep(4)
             welcome()
+
+def end_match(win:bool):
+    if win:
+        print("\nCongratulations! You guess the secret word!\n")
+        print("      '._==_==_=_.'     ")
+        print("       ___________      ")
+        print("      .-\\:      /-.    ")
+        print("     | (|:.     |) |    ")
+        print("      '-|:.     |-'     ")
+        print("        \\::.    /      ")
+        print("         '::. .'        ")
+        print("           ) (          ")
+        print("         _.' '._        ")
+        print("        '-------'       ")
+    else:
+        print("    _______________         ")
+        print("   /               \\       ")
+        print("  /                 \\     ")
+        print("//                   \\/\\  ")
+        print("\\|   XXXX     XXXX   | /   ")
+        print(" |   XXXX     XXXX   |/     ")
+        print(" |   XXX       XXX   |      ")
+        print(" |                   |      ")
+        print(" \\__      XXX      __/     ")
+        print("   |\\     XXX     /|       ")
+        print("   | |           | |        ")
+        print("   | I I I I I I I |        ")
+        print("   |  I I I I I I  |        ")
+        print("   \\_             _/       ")
+        print("     \\_         _/         ")
+        print("       \\_______/           ")
 
 if(__name__ == "__main__"): #contexto de execução do programa
     play()
