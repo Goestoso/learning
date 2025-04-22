@@ -113,13 +113,20 @@ Repositório Git
 |   +-- Commit C         # Terceiro commit
 |
 +-- Branches
-|   +-- master           # Branch principal
-|   +-- dev              # Branch de desenvolvimento
-|   +-- feature          # Branch de funcionalidades
+|   +-- master (main)    #  Principal e única
+|   +-- dev              #  Desenvolvimento
+|   +-- feature          #  Funcionalidades
+|   +-- docs             #  Documentos
+|   +-- test             #  Testes
+|   +-- hotfix           #  Correção de erros críticos
+|   +-- bugfix           #  Correção de bugs previstos
+|   +-- release          #  Versão estável do projeto
 
 ```
 
-<h3>O fluxo de trabalho básico do Git</h3> 
+<h3>Git Flow</h3> 
+
+<h4>Fluxo básico</h4> 
 
 - ___Início:___ Iniciar um repositório local.
 ```
@@ -128,6 +135,51 @@ git init
 - ___Clonar:___ Criar uma cópia local de um repositório remoto.
 ```
 git clone <URL_do_repositório>
+```
+- ___Fork___: Criar uma cópia independente de um repositório na sua conta GitHub.
+> 1. Acesse o repositório que você quer forkar. <br>
+> 2. No canto superior direito da página, clique no botão **Fork** <br>
+> 3. Se você participa de mais de uma organização, o GitHub vai perguntar em qual conta (sua ou de uma organização) você quer criar o fork. Escolha sua conta. <br>
+> 4. Pronto! Agora você terá uma cópia independente do repositório no seu próprio GitHub. *Exemplo*: https://github.com/seu-usuario/cpython <br>
+> 5.  Depois, clone o fork para sua máquina:
+```
+git clone https://github.com/seu-usuario/cpython.git
+cd cpython
+```
+
+- ___Branches:___ Criar ramificações para desenvolver recursos separadamente.
+> Para listar todas as ramificações (branches):
+```
+git branch
+```
+> Para criar uma nova branch:
+```
+git branch <nome_da_branch>
+```
+> Observação: use a estrutura de pastas no Git para separar o tipo da branch e a característica afetada:
+```
+git branch featue/login # tudo em minúsculo
+git branch bugfix/cadastro
+git branch hotfix/api-timeout # use "-" ao invés de espaços
+git branch release/v1.0.0
+git branch dev/app # caso tenha outros apps
+git branch docs/app/instructions # caso o app tenha mais de um doc
+```
+> Para mudar para uma branch específica:
+```
+git checkout <nome_da_branch>
+```
+> Para criar uma nova branch e mudar para essa nova branch:
+```
+git checkout -b <nome_da_branch>
+```
+> Para deletar uma branch:
+```
+git branch -d nome_da_branch
+```
+> Para renomear uma branch:
+```
+git branch -m nome_antigo nome_novo
 ```
 - ___Status:___ Verificar o status do repositório.
 ```
@@ -147,6 +199,26 @@ git add <nome_do_arquivo>
 ```
 git commit -m "Sua mensagem de commit"
 ```
+- ___Push:___ Enviar as alterações para um repositório remoto (como o GitHub).
+> Para enviar as alterações da branch local para a branch remota:
+```
+git push origin <nome_da_branch>
+```
+> Para deletar uma branch remota:
+```
+git push origin --delete <nome_da_branch>
+```
+- ___Pull:___ Obter as alterações do repositório remoto para o local.
+```
+git pull origin <nome_da_branch>
+```
+- ___Fetch:___ Atualizr o repositório local com as referências remotas, mas sem alterar o que você está trabalhando.
+```
+git fetch origin
+```
+
+<h4>Fluxo dos commits</h4> 
+
 > Checkout de um Commit Específico (muda o estado do repositório para um commit específico sem criar uma nova branch):
 ```
 git checkout <commit_hash>
@@ -218,32 +290,10 @@ git log --since="2 weeks ago"
 ```
 git reflog
 ```
-- ___Branches:___ Criar ramificações para desenvolver recursos separadamente.
-> Para listar todas as ramificações (branches):
-```
-git branch
-```
-> Para criar uma nova branch:
-```
-git branch <nome_da_branch>
-```
-> Para mudar para uma branch específica:
-```
-git checkout <nome_da_branch>
-```
-> Para criar uma nova branch e mudar para essa nova branch:
-```
-git checkout -b <nome_da_branch>
-```
-> Para deletar uma branch:
-```
-git branch -d nome_da_branch
-```
-> Para renomear uma branch:
-```
-git branch -m nome_antigo nome_novo
-```
-- ___Merge:___ Integrar as alterações de uma ramificação em outra.
+
+<h4>Fluxo de integrações</h4> 
+
+- ___Merge:___ Unir duas branches preservando o histórico dos commits.
 > Primeiro, vá para a branch de destino (por exemplo, a branch principal):
 ```
 git checkout main
@@ -252,13 +302,40 @@ git checkout main
 ```
 git merge <nome_da_outra_branch>
 ```
-- ___Push:___ Enviar as alterações para um repositório remoto (como o GitHub).
+- ___Rebase:___ Reescrever o histórico da sua branch, aplicando os commits “por cima” da base atual.
+> Primeiro, vá para a branch de destino (por exemplo, a branch principal):
 ```
-git push origin <nome_da_branch>
+git checkout main
 ```
-- ___Pull:___ Obter as alterações do repositório remoto para o local.
+> Em seguida, faça o rebase da outra branch (por exemplo, uma feature branch):
 ```
-git pull origin <nome_da_branch>
+git rebase <nome_da_outra_branch>
+```
+-  ___Squash:___ Combinar vários commits em um único commit.
+> Primeiro, vá para a branch de revisão (por exemplo, a branch feature):
+```
+git checkout feature
+```
+> Em seguida, faça o rebase interativo para Squash dos Commits:
+```
+git rebase -i HEAD~n # Onde 'n' é o número de commits que você quer revisar
+```
+> Quando você executa o comando, o Git abrirá o editor de texto mostrando uma lista de commits, algo assim:
+```
+pick abc1234 Commit 1
+pick def5678 Commit 2
+pick ghi9012 Commit 3
+```
+> Para combinar os commits em um único, você vai mudar os pick dos commits subsequentes para squash (ou s):
+```
+pick abc1234 Commit 1
+squash def5678 Commit 2
+squash ghi9012 Commit 3
+```
+> Depois de salvar e sair do editor, o Git irá combinar os commits e abrirá uma tela para você editar a mensagem do novo commit combinado. Uma vez que os commits tenham sido combinados (squash), você pode fazer o merge dessa branch para a branch principal (geralmente main ou dev):
+```
+git checkout main
+git merge feature-branch
 ```
 
 <h3>🔀 Merge ❌ Rebase 🔃</h3>
@@ -428,6 +505,63 @@ git remote set-url --push origin [NEW_PUSH_URL]
 > <br>
 > Deletar uma branch remota: ```git push origin --delete nome_da_branch```
 
+<h4>🔢 Versionamento Semântico (SemVer) </h4>
+
+O versionamento semântico usa ***três números*** para definir a versão de um software:
+```
+MAJOR.MINOR.PATCH
+Exemplo: 1.4.2
+```
+
+<h5>1 – MAJOR (Versão principal)</h5>
+
+> Mudanças ***incompatíveis*** na API ou estrutura do sistema.
+
+- Quebra retrocompatibilidade
+
+- Necessário se o sistema muda significativamente
+
+```
+0.9.5 → 1.0.0 ✅
+```
+
+<h5>4 – MINOR (Versão secundária)</h5>
+
+> Novidades e funcionalidades adicionadas ***sem quebrar*** o que já existia.
+
+- Sistema continua compatível com a versão anterior
+- Pode adicionar algo novo sem afetar quem já usa
+
+```
+1.2.0 → 1.3.0 ✅
+```
+
+<h5>2 – PATCH (Correções)</h5>
+
+> Correções de ***bugs***, ajustes internos, melhorias pequenas.
+
+- Não afeta funcionalidades visíveis
+- Ideal para hotfixes
+
+```
+1.3.0 → 1.3.1 ✅
+```
+
+<h5>E as versões com sufixo?</h5>
+
+***Pré-releases*** (testes antes da final).
+```
+1.0.0-rc.1     # Release candidate
+1.0.0-alpha     # Primeira versão de testes
+1.0.0-beta      # Mais estável que alpha, mas ainda em testes
+```
+
+<h5>Dicas finais do SemVer</h5>
+
+- Versões `0.x.y` indicam que o projeto ainda está em desenvolvimento e pode quebrar a qualquer momento.
+- Só use `1.0.0` quando você sentir que o projeto já tem funcionalidades sólidas e estável o suficiente.
+- Use ***tags*** para marcar essas versões no repositório.
+
 <h4>🔖 Tags</h4>
 
 → `Tags` no Git são referências que _apontam para pontos específicos na história_ do repositório, normalmente usadas para __marcar versões ou releases significativos__ de um projeto. 
@@ -446,15 +580,15 @@ git tag nome_da_tag
 ```
 > Exemplo:
 ```
-git tag v1.0.0
+git tag app/vx.y.z
 ```
 - Criar uma Tag Anotada:
 ```
-git tag -a nome_da_tag -m "mensagem da tag"
+git tag -a app/vx.y.z -m "mensagem da tag"
 ```
 > Exemplo:
 ```
-git tag -a v1.0.0 -m "Versão 1.0.0 - Primeira release estável"
+git tag -a app/v1.0.0 -m "Versão 1.0.0 - Primeira release estável"
 ```
 - Listar Tags:
 > Para listar todas as tags no repositório:
@@ -481,7 +615,7 @@ git checkout -b nome_da_nova_branch nome_da_tag
 ```
 > Exemplo:
 ```
-git checkout -b hotfix-v1.0.1 v1.0.0
+git checkout -b hotfix/v1.0.1 app/v1.0.0
 ```
 - Remover Tags:
 > Remover Tag Localmente
@@ -498,6 +632,57 @@ git push origin --delete tag nome_da_tag
 > Comparar diferenças entre tags: ```git diff tag1 tag2```
 > <br>
 > Listar commits associados a uma tag: ```git log nome_da_tag```
+
+<h4>📈 Release</h4>
+
+Um ***release*** é uma ***versão empacotada*** do seu projeto. Ele representa um marco importante no desenvolvimento, como:
+
+- MVPs (Minimum Viable Product, ou em português, Produto Mínimo Viável)
+
+- Adição de funcionalidades
+
+- Correções importantes
+
+- Lançamentos públicos
+
+> No GitHub, um Release inclui:
+
+- Uma ***tag*** (obrigatório)
+
+- Um título
+
+- Um changelog (Release Notes)
+
+- Um botão para baixar um `.zip` ou `.tar.gz` com o código da versão
+
+> Como criar um Release no GitHub?
+
+- 1. Vá na aba **Releases** do repositório.
+- 2. Clique em "**Draft a new release**".
+- 3. Preencha:
+```
+Tag version: Ex. v0.1.0
+
+Pode selecionar uma existente ou criar uma nova
+
+Target: Qual branch ou commit essa tag aponta
+
+Release title: Nome do release (ex. Guess v0.1.0 - MVP inicial)
+
+Description (Release Notes): Destaques dessa versão
+
+(Opcional) Marque como Pre-release
+```
+- 4. Clique em **Publish Release**.
+
+> Convenções de nome e versão:
+
+| **Tipo**   | **Exemplo**   | **Observações**  |
+|------------|------------|------------|
+| Tag  | `app/v0.1.0`  | 	Prefixo `v` é comum (opcional)  |
+| Título do release  | `App v0.1.0 - MVP` | Seja descritivo e direto |
+| Pré-release  | `app/v1.0.0-rc.1`  | 	Marque no GitHub como "Pre-release"  |
+
 
 <h4>🔄️ Upstream</h4>
 
