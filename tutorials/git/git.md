@@ -1,6 +1,6 @@
-<h1>Tutotial do Git 😼 </h1> 
+<h1>😼 Tutorial do Git</h1> 
 
-<h2>O que é o Git?</h2>
+<h2>🤔 O que é o Git?</h2>
 
 - O Git é um sistema de controle de versão distribuído, ou seja, isso significa que cada clone local de um projeto é um repositório completo de ___controle de versão___.
 - Esses repositórios locais funcionam de forma independente, facilitando o trabalho offline ou remoto.
@@ -72,7 +72,7 @@
 
 - `HEAD` é um ponteiro que sempre aponta para o `commit` mais recente na `branch` atual (`master` neste caso).
 
-<h2>Como o Git funciona?</h2>
+<h2>⚙️ Como o Git funciona?</h2>
 
 - O Git rastreia as alterações em arquivos e mantém um histórico completo de todas as modificações.
 - Ele permite que você volte para versões anteriores do código, compare alterações e colabore com outras pessoas.
@@ -124,9 +124,9 @@ Repositório Git
 
 ```
 
-<h3>Git Flow</h3> 
+<h3>🔁 Git Flow</h3> 
 
-<h4>Fluxo básico</h4> 
+<h4>🔄️ Fluxo básico</h4> 
 
 - ___Início:___ Iniciar um repositório local.
 ```
@@ -217,7 +217,7 @@ git pull origin <nome_da_branch>
 git fetch origin
 ```
 
-<h4>Fluxo dos commits</h4> 
+<h4>🔃 Fluxo dos commits</h4> 
 
 > Checkout de um Commit Específico (muda o estado do repositório para um commit específico sem criar uma nova branch):
 ```
@@ -291,7 +291,7 @@ git log --since="2 weeks ago"
 git reflog
 ```
 
-<h4>Fluxo de integrações</h4> 
+<h4>🔀 Fluxo de integrações</h4> 
 
 - ___Merge:___ Unir duas branches preservando o histórico dos commits.
 > Primeiro, vá para a branch de destino (por exemplo, a branch principal):
@@ -513,7 +513,7 @@ MAJOR.MINOR.PATCH
 Exemplo: 1.4.2
 ```
 
-<h5>1 – MAJOR (Versão principal)</h5>
+<h5>1️⃣ – MAJOR (Versão principal)</h5>
 
 > Mudanças ***incompatíveis*** na API ou estrutura do sistema.
 
@@ -525,7 +525,7 @@ Exemplo: 1.4.2
 0.9.5 → 1.0.0 ✅
 ```
 
-<h5>4 – MINOR (Versão secundária)</h5>
+<h5>4️⃣ – MINOR (Versão secundária)</h5>
 
 > Novidades e funcionalidades adicionadas ***sem quebrar*** o que já existia.
 
@@ -536,7 +536,7 @@ Exemplo: 1.4.2
 1.2.0 → 1.3.0 ✅
 ```
 
-<h5>2 – PATCH (Correções)</h5>
+<h5>2️⃣ – PATCH (Correções)</h5>
 
 > Correções de ***bugs***, ajustes internos, melhorias pequenas.
 
@@ -547,7 +547,7 @@ Exemplo: 1.4.2
 1.3.0 → 1.3.1 ✅
 ```
 
-<h5>E as versões com sufixo?</h5>
+<h5>💡 E as versões com sufixo?</h5>
 
 ***Pré-releases*** (testes antes da final).
 ```
@@ -556,7 +556,7 @@ Exemplo: 1.4.2
 1.0.0-beta      # Mais estável que alpha, mas ainda em testes
 ```
 
-<h5>Dicas finais do SemVer</h5>
+<h5>🧠 Dicas finais do SemVer</h5>
 
 - Versões `0.x.y` indicam que o projeto ainda está em desenvolvimento e pode quebrar a qualquer momento.
 - Só use `1.0.0` quando você sentir que o projeto já tem funcionalidades sólidas e estável o suficiente.
