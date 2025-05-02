@@ -1,36 +1,11 @@
-""""Arquivo Principal do jogo Guess"""
- 
+"""Arquivo de Funções Auxiliares do jogo Guess"""
+
 #importando bibliotecas
-import random
-import tkinter
-import time
+import time, random
 from pathlib import Path
 
-def play(): #função principal do jogo
-    welcome()
-    load_secret_word()
-
-    words = load_words()
-    secret_word = random.choice(words)
-    #print(f'Palavra selecionada: {secret_word}\n')
-
-    start_game(secret_word)
-
-    close_or_again = '' 
-    while True:
-        print("\nWhat do you want to do? \n")
-        close_or_again = input('Options: \n\n- Try again (type Again)\n\n- Go back to beginning (type Back)\n\nChoose an option: ').upper()
-        if close_or_again == ("AGAIN"):
-            load_secret_word()
-            time.sleep(2)
-            secret_word = random.choice(words)
-            start_game(secret_word)
-        elif close_or_again == ("BACK"):
-            print("\nReturning to the main menu...\n")
-            time.sleep(1)
-            play()
-        else:
-            print('Please, enter "Again" or "Back"\n ')
+words = list('')
+secret_word = ''
 
 def load_words(): #carrega as palavras do arquivo words na lista words
     base_dir = Path(__file__).resolve().parent.parent  # volta ao diretório raiz do projeto
@@ -45,7 +20,7 @@ def load_words(): #carrega as palavras do arquivo words na lista words
     
     return words
 
-def load_secret_word(): #função que mostra que uma nova palavra secreta está sendo carregada
+def loading_secret_word(): #função que mostra que uma nova palavra secreta está sendo carregada
     print("\nLoading secret word...")
     time.sleep(1)
     print("3")
@@ -55,7 +30,9 @@ def load_secret_word(): #função que mostra que uma nova palavra secreta está 
     print("1\n")
     time.sleep(1)
 
-def start_game(secret_word): #função para as partidas do jogo
+def start_game(): #função para as partidas do jogo
+    global secret_word
+    #print(f'Palavra selecionada: {secret_word}\n')
     # Mostrar a palavra com underscores
     attempted_letters = set() #conjunto para armazenar letras que já foram usadas
     attempted_words = set() #para palavras já usadas
@@ -67,7 +44,7 @@ def start_game(secret_word): #função para as partidas do jogo
         # Verificar se o jogador adivinhou a palavra inteira
         if len(guess) == len(secret_word) and guess.isalpha():
             if guess == secret_word:
-                end_match(True)
+                win_or_lose(True)
                 break
             elif guess in attempted_words:
                 print(f'\nThe word "{guess}" has already been tried, try another guess!')
@@ -87,7 +64,7 @@ def start_game(secret_word): #função para as partidas do jogo
                     if secret_word[i] == guess:
                         guessed_word[i] = guess
                 if '_' not in guessed_word:
-                    end_match(True)
+                    win_or_lose(True)
                     break
             else:
                 attempted_letters.add(guess)
@@ -109,9 +86,9 @@ def start_game(secret_word): #função para as partidas do jogo
 
     if attempts == 0:
         print(f'\nYou lose! The word was: "{secret_word}"')
-        end_match(False)
+        win_or_lose(False)
 
-def welcome(): #função de abertura do jogo
+def main_menu(): #função de abertura do jogo
     print("*************************************")
     print("***********Welcome to Guess**********")
     print("*************************************")
@@ -136,35 +113,39 @@ def welcome(): #função de abertura do jogo
             print("Invalid input! Please, enter a number between 1 and 3.")
             
     if option == 1:
-            return
+        global words, secret_word
+        loading_secret_word()
+        words = load_words()
+        secret_word = random.choice(words)
+        
     elif option == 2:
-            print("See you later!")
-            exit()
+        print("See you later!")
+        exit()
 
     elif option == 3: 
-            print("\n📜 Instructions for Guess Game 📜\n")
-            time.sleep(1)
-            print("🔹 The goal is to guess the secret word chosen randomly.")
-            time.sleep(1.5)
-            print("🔹 The word will be represented by underscores (_ _ _).")
-            time.sleep(1.5)
-            print("🔹 You can guess one letter at a time or try to guess the full word.")
-            time.sleep(1.5)
-            print("🔹 If the letter is in the word, it will be revealed in the correct positions.")
-            time.sleep(1.5)
-            print("🔹 If you guess wrong, you lose a try.")
-            time.sleep(4)
-            print("\n🎮 The game ends when:\n ")
-            time.sleep(2)
-            print("✅ You correctly guess the word 🎉")
-            time.sleep(1.5)
-            print("❌ You run out of tries and lose 😢")
-            time.sleep(1.5)
-            print("\n🔹 Good luck and have fun! 🚀\n")
-            time.sleep(4)
-            welcome()
+        print("\n📜 Instructions for Guess Game 📜\n")
+        time.sleep(1)
+        print("🔹 The goal is to guess the secret word chosen randomly.")
+        time.sleep(1.5)
+        print("🔹 The word will be represented by underscores (_ _ _).")
+        time.sleep(1.5)
+        print("🔹 You can guess one letter at a time or try to guess the full word.")
+        time.sleep(1.5)
+        print("🔹 If the letter is in the word, it will be revealed in the correct positions.")
+        time.sleep(1.5)
+        time.sleep(4)
+        print("\n🎮 The game ends when:\n ")
+        time.sleep(2)
+        print("✅ You correctly guess the word 🎉")
+        time.sleep(1.5)
+        print("❌ You run out of tries and lose 😢")
+        time.sleep(1.5)
+        print("\n🔹 Good luck and have fun! 🚀\n")
+        time.sleep(4)
+        main_menu()
+        print("🔹 If you guess wrong, you lose a try.")
 
-def end_match(win:bool):
+def win_or_lose(win:bool):
     if win:
         print("\nCongratulations! You guess the secret word!\n")
         print("      '._==_==_=_.'     ")
@@ -195,5 +176,20 @@ def end_match(win:bool):
         print("     \\_         _/         ")
         print("       \\_______/           ")
 
-if(__name__ == "__main__"): #contexto de execução do programa
-    play()
+def end_game():
+    global words, secret_word
+    close_or_again = '' 
+    while True:
+        print("\nWhat do you want to do? \n")
+        close_or_again = input('Options: \n\n- Try again (type Again)\n\n- Go back to beginning (type Back)\n\nChoose an option: ').upper()
+        if close_or_again == ("AGAIN"):
+            loading_secret_word()
+            time.sleep(2)
+            secret_word = random.choice(words)
+            start_game()
+        elif close_or_again == ("BACK"):
+            print("\nReturning to the main menu...\n")
+            time.sleep(1)
+            main_menu()
+        else:
+            print('Please, enter "Again" or "Back"\n ')
