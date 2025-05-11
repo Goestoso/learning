@@ -5,8 +5,8 @@ from src import utils
 def main(config_path):
     load_config(config_path)
     set_configs()
-    if utils.opion_created or utils.opion_modified:
+    if utils.option_new or utils.option_modified:
         load_tasksplanner_json()
-        if utils.opion_created: create_tasksnew_json()
-        if utils.opion_modified: create_changedbucketes_json()
+        if utils.option_new: create_tasksnew_json()
+        if utils.option_moved: create_changedbucketes_json()
     exit()

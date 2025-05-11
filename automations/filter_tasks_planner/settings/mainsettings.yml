@@ -13,8 +13,8 @@ others:
     tasks_new: C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\data\tasksnew.json
 
 options:
-    created: true
-    modified: true
+    tasks_new: true
+    tasks_moved: true
 
 log:
     active: true

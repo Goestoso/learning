@@ -4,7 +4,7 @@ import json, time, hashlib, yaml
 import pandas as pd
 from pathlib import Path
 
-config, json_path, excel_path, moved_path, new_path, log_active, log_mode, log_path, tarefas_atuais, tarefas_antigas, opion_created, opion_modified = [None for _ in range(12)]
+config, json_path, excel_path, moved_path, new_path, log_active, log_mode, log_path, tarefas_atuais, tarefas_antigas, option_new, option_moved = [None for _ in range(12)]
 
 def load_config(config_path:Path):
     global config
@@ -12,7 +12,7 @@ def load_config(config_path:Path):
         config = yaml.safe_load(f)
         
 def set_configs():
-    global json_path, excel_path, moved_path, new_path, log_active, log_mode, log_path, opion_created, opion_modified
+    global json_path, excel_path, moved_path, new_path, log_active, log_mode, log_path, option_new, option_moved
     # Acessa os caminhos do YAML
     json_path = Path(config['observe']['file'])
     excel_path = Path(config['others']['tasks_excel'])
@@ -21,8 +21,8 @@ def set_configs():
     log_active = config['log']['active']
     log_mode = config['log']['mode']
     log_path = Path(config['log']['path'])
-    opion_created = config['options']['created']
-    opion_modified = config['options']['modified']
+    option_new = config['options']['tasks_new']
+    option_moved = config['options']['tasks_moved']
     
 def load_tasksplanner_json():
     global tarefas_atuais, tarefas_antigas
@@ -58,7 +58,7 @@ def create_tasksnew_json():
     # Detecta novas tarefas
     tarefas_novas = []
 
-    for id_tarefa, bucket_atual in tarefas_atuais.items():
+    for id_tarefa, _ in tarefas_atuais.items():
         bucket_anterior = tarefas_antigas.get(id_tarefa)
         if bucket_anterior is None:
             tarefas_novas.append({'id': id_tarefa})
