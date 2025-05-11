@@ -15,9 +15,9 @@ def set_configs():
     global json_path, excel_path, moved_path, new_path, log_active, log_mode, log_path, option_new, option_moved
     # Acessa os caminhos do YAML
     json_path = Path(config['observe']['file'])
-    excel_path = Path(config['others']['tasks_excel'])
-    moved_path = Path(config['others']['tasks_moved'])
-    new_path = Path(config['others']['tasks_new'])
+    excel_path = Path(config['data']['tasks_excel'])
+    moved_path = Path(config['data']['tasks_moved'])
+    new_path = Path(config['data']['tasks_new'])
     log_active = config['log']['active']
     log_mode = config['log']['mode']
     log_path = Path(config['log']['path'])
