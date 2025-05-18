@@ -33,14 +33,14 @@ Depois de criar um arquivo `.py`, você pode executá-lo pelo terminal ou prompt
 
 Se quiser executar um código interativo, basta digitar `python` no terminal e começar a programar diretamente.
 
+---
+
 # 📦 Guia Completo sobre o Pip
 
 ## 🔍 O que é o Pip?
 O `pip` é o sistema de gerenciamento de pacotes padrão para Python. Ele permite instalar, atualizar e remover bibliotecas e módulos de terceiros, facilitando o desenvolvimento de aplicações.
 
 A maioria das versões modernas do Python já vem com `pip` pré-instalado, tornando a instalação de pacotes extremamente simples.
-
----
 
 ## 🚀 Como verificar se o Pip está instalado?
 Para verificar se o `pip` está instalado em seu sistema, abra o terminal ou prompt de comando e digite:
@@ -131,7 +131,10 @@ Isso garantirá que todas as bibliotecas necessárias sejam instaladas de uma s�
 
 ### 🔍 Como buscar pacotes disponíveis no PyPI?
 Para procurar pacotes no Python Package Index (PyPI), visite:
+
 🔗 https://pypi.org
+
+---
 
 # 🌍 Guia Completo sobre Ambientes Virtuais no Python
 
@@ -189,7 +192,7 @@ Exemplo:
 pip install requests pandas
 ```
 
-Os pacotes serão instalados dentro do ambiente virtual, sem afetar o sistema principal
+Os pacotes serão instalados dentro do ambiente virtual, sem afetar o sistema principal.
 
 Se precisar salvar todas as dependências instaladas, gere um arquivo `requirements.txt`:
 ```sh
