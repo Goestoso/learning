@@ -30,7 +30,8 @@ pip install notebook
 
 ### 💡 Alternativas:
 Você também pode instalar o Jupyter como parte do pacote **Anaconda** (recomendado para ciência de **dados**):
-🔗 anaconda.com
+
+🔗 https://anaconda.com
 
 ## ▶️ Como iniciar um Jupyter Notebook?
 Depois de instalado, abra o terminal e execute:
@@ -73,7 +74,7 @@ Você pode:
 ### 3. Executar células
 - Clique no botão ▶️ ao lado de cada célula.
 
-- Ou use ``Shift + Enter` para executar.
+- Ou use `Shift + Enter` para executar.
 
 ### 4. Ambiente de execução (kernel)
 - A primeira vez que abrir um notebook, o VSCode perguntará qual **kernel (ambiente Python)** usar.
