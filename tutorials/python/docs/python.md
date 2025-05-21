@@ -33,6 +33,12 @@ Depois de criar um arquivo `.py`, você pode executá-lo pelo terminal ou prompt
 
 Se quiser executar um código interativo, basta digitar `python` no terminal e começar a programar diretamente.
 
+## 🛑 Como parar a execução programas Python?
+Se um script Python estiver em execução (por exemplo, um loop infinito ou uma tarefa longa), você pode interrompê-lo no terminal pressionando `Ctrl + C
+`.
+
+> Isso envia um sinal de ***KeyboardInterrupt***, que faz o Python encerrar o processo atual.
+
 ---
 
 # 📦 Guia Completo sobre o Pip
