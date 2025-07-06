@@ -1,7 +1,14 @@
+"""Módulo executável do app Filter Tasks Planner"""
 from src import main
+from src import utils
 from pathlib import Path
 
 config_path = Path(__file__).resolve().parent / 'settings' / 'mainsettings.yml'
 
 if __name__ == "__main__":
-    main(config_path)
+    try:
+        main.run_scheduler(config_path)
+    except KeyboardInterrupt:
+        if utils.log_active:
+            utils.logger.warning("Programa encerrado pelo usuário com Ctrl+C.")
+        print("🔹 Execução das tarefas agendadas do Filter Tasks Planner finalizada!\n")

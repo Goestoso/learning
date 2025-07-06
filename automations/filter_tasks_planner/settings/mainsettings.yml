@@ -4,7 +4,7 @@ app:
     version: 1.0.0
 
 observe:
-    schedule: 300 # segundos
+    schedule: 60 # segundos
     file: C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\data\tasksplanner.json # arquivo para monitorar
 
 data:
@@ -18,5 +18,4 @@ options:
 
 log:
     active: true
-    mode: INFO # DEBUG, INFO, WARNING e ERROR
     path: C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\log\filter_tasks_planner.log
