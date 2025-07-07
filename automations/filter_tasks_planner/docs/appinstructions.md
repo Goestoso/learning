@@ -6,6 +6,7 @@ Sistema automatizado para identificar novas tarefas e mudanças de bucket em tar
 
 ## 📂 Estrutura do App
 
+```
 filter_tasks_planner/
 ├── settings/
 │ └── mainsettings.yml
@@ -20,7 +21,7 @@ filter_tasks_planner/
 │ ├── main.py # Função principal com agendamento
 │ └── utils.py # Funções auxiliares e lógica do app
 └── FilterTasksPlanner.py # Arquivo executável principal
-
+```
 
 ---
 
