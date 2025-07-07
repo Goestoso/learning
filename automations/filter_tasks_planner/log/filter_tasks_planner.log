@@ -1,8 +1,0 @@
-[06/07/2025 19:51:07] INFO: Logger configurado com sucesso.
-[06/07/2025 19:51:07] INFO: Tarefas agendadas para rodarem a cada 60 segundos.
-[06/07/2025 19:52:07] INFO: Iniciando execução do filtro das tarefas do planner...
-[06/07/2025 19:52:07] INFO: Conteúdo do arquivo C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\data\tasksplanner.json carregado com sucesso.
-[06/07/2025 19:52:07] INFO: Nenhuma tarefa nova encontrada.
-[06/07/2025 19:52:07] INFO: 5 tarefa(s) mudaram de bucket. Resultado salvo em C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\data\changedbuckets.json.
-[06/07/2025 19:52:07] INFO: Finalizando execução do filtro das tarefas do planner...
-[06/07/2025 19:52:16] WARNING: Programa encerrado pelo usuário com Ctrl+C.

@@ -38,31 +38,49 @@ def set_configs():
         print(f"Erro inesperado: {e}")
         
 def setup_log():
-    if log_active:
-        logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('[%(asctime)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    if not log_active:
+        return
 
-        try:
-            file_handler = logging.FileHandler(log_path, encoding='utf-8')
-        except (OSError, FileExistsError) as e:
-            fallback_path = Path("C:/Temp/Filter Tasks Planner/filter_tasks_planner.log")
-            file_handler = logging.FileHandler(fallback_path, encoding='utf-8')
-            # Aviso de fallback — importante que seja visível
-            print(f"[AVISO] Não foi possível acessar o caminho do log em '{log_path}'. Usando fallback em '{fallback_path}'. Erro: {e}")
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s: %(message)s',
+        datefmt='%d/%m/%Y %H:%M:%S'
+    )
 
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
+    try:
+        # Verifica se o caminho é um diretório (sem extensão)
+        if log_path.suffix == "":
+            # Cria subdiretório 'log' e define o nome padrão do arquivo
+            log_dir = log_path / 'log'
+            log_dir.mkdir(parents=True, exist_ok=True)
+            full_log_path = log_dir / 'FilterTasksPlanner.log'
+        elif log_path.suffix == ".log":
+            # Se for um caminho de arquivo, cria diretório pai se necessário
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            full_log_path = log_path
+        else:
+            raise ValueError(f"O caminho de log '{log_path}' deve ser um diretório ou um arquivo '.log'.")
 
-        # Se quiser também no terminal:
-        #console_handler.setFormatter(formatter)
-        #logger.addHandler(console_handler)
+        file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
 
-        logger.info("Logger configurado com sucesso.")
-        if file_handler.baseFilename != str(log_path):
-            logger.warning(f"Arquivo de log redirecionado para '{file_handler.baseFilename}' pois '{log_path}' não pôde ser acessado.")
+    except (OSError, ValueError) as e:
+        fallback_path = Path("C:/Temp/FilterTasksPlanner")
+        fallback_path.mkdir(parents=True, exist_ok=True)
+        full_log_path = fallback_path / "filter_tasks_planner.log"
+        file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
+        print(f"[AVISO] Não foi possível acessar o caminho de log em '{log_path}'. Usando fallback em '{full_log_path}'. Erro: {e}")
+
+    # Aplica formatter e adiciona handler
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    # Log inicial
+    logger.info("Logger configurado com sucesso.")
+
+    if str(full_log_path) != str(log_path):
+        logger.warning(f"Arquivo de log redirecionado para '{full_log_path}' pois '{log_path}' não pôde ser acessado.")
 
 
-        
 def verify_observe_schedule():
     global observe_schedule
     if observe_schedule < 60:

@@ -18,4 +18,4 @@ options:
 
 log:
     active: true
-    path: C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\log\filter_tasks_planner.log
+    path: C:\Users\gabri\OneDrive\Documentos\Projetos\Artificial\learning\automations\filter_tasks_planner\log\FilterTasksPlanner.log
