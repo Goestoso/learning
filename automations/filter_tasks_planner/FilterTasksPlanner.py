@@ -2,8 +2,14 @@
 from src import main
 from src import utils
 from pathlib import Path
+import sys
 
-config_path = Path(__file__).resolve().parent / 'settings' / 'mainsettings.yml'
+if getattr(sys, 'frozen', False):
+    base_path = Path(sys.executable).parent
+else:
+    base_path = Path(__file__).resolve().parent
+
+config_path = base_path / 'settings' / 'mainsettings.yml'
 
 if __name__ == "__main__":
     try:
