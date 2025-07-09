@@ -15,17 +15,15 @@ VSVersionInfo(
       StringTable(
         '040904B0',
         [StringStruct('CompanyName', 'Artificial'),
-         StringStruct('FileDescription', 'Tool to automatically filter Microsoft Planner tasks.'),
+         StringStruct('FileDescription', 'Filter Tasks Planner'),
          StringStruct('FileVersion', '1.0.0'),
          StringStruct('InternalName', 'FilterTasksPlanner'),
          StringStruct('LegalCopyright', 'Copyright © 2025'),
          StringStruct('OriginalFilename', 'FilterTasksPlanner.exe'),
          StringStruct('ProductName', 'Filter Tasks Planner'),
-         StringStruct('ProductVersion', '1.0.0')])
+         StringStruct('ProductVersion', '1.0.0')]
+      )
     ]),
-    VarFileInfo([
-    VarStruct('Translation', [1033, 1200]),  # en-US
-    VarStruct('Translation', [1046, 1200])   # pt-BR
-    ])
+    VarFileInfo([VarStruct('Translation', [1046, 1200])])
   ]
 )
