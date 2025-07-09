@@ -55,14 +55,46 @@ log:
 
 > ⚠️ O campo `log.path` pode ser tanto um diretório quanto um arquivo completo. Se for um diretório, o sistema criará automaticamente um arquivo chamado `FilterTasksPlanner.log` dentro dele.
 
+---
+
+## ▶️ Execução
+
+O programa é executado em linha de comando:
+
+```
+C:\Caminho\do\programa>FilterTasksPlanner.exe
+```
+Após **iniciar** a execução, se as configurações estiverem corretas, a seguinte mensagem será mostrada no terminal:
+
+```
+Iniciando execução das tarefas agendadas do Filter Tasks Planner...
+🔹 Pressione Ctrl + C para encerrar o programa.
+```
+
+Após **finalizar** a execução, a seguinte mensagem será mostrada no terminal:
+
+```
+🔹 Execução das tarefas agendadas do Filter Tasks Planner finalizada!
+
+```
+
+> Durante a execução do programa, caso o log esteja ativado, um arquivo `.log` será gerado. Podendo ser registrado as seguintes _flags_:
+
+- `INFO`: informação relacionada a alguma ação executada pelo programa. 
+- `WARNING`: avisos sobre eventos relacionados a alterações de comportamento.
+- `ERROR`: erros identificados durante a execução.
+---
+
 ## 💡 Funcionalidades
 
 - 📥 Detecta tarefas novas que não estão na planilha de referência.
 
+- ⚠️ Atente-se às tarefas novas pois elas indicam que a planilha de referência está defasada.
+
 - 🔁 Detecta mudanças de bucket em tarefas já existentes.
 
-- 🧾 Gera logs informativos e detalhados no arquivo especificado.
+- 🧾 Gera logs informativos e detalhados no arquivo especificado em `appsettings.json`.
 
-- 🔁 Executa automaticamente de forma contínua com agendamento.
+- 🔁 Executa automaticamente de forma contínua usando agendamento.
 
 - 🛑 Pode ser encerrado usando as teclas `Ctrl + C`.
