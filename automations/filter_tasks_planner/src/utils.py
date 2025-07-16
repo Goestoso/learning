@@ -104,6 +104,10 @@ def load_tasksplanner_json():
         if not {'Identificação da tarefa', 'ID do Bucket'}.issubset(df_antigo.columns):
             raise ValueError("A planilha deve conter as colunas 'Identificação da tarefa' e 'ID do Bucket'.")
 
+        duplicados = df_antigo['Identificação da tarefa'][df_antigo['Identificação da tarefa'].duplicated()]
+        if not duplicados.empty:
+            logger.warning(f"Foram encontradas {duplicados.nunique()} tarefas duplicadas na planilha. IDs: {duplicados.unique().tolist()}")
+        
         tarefas_antigas = dict(zip(df_antigo['Identificação da tarefa'], df_antigo['ID do Bucket']))
         if log_active:
             logger.info(f"Conteúdo do arquivo {json_path} carregado com sucesso.")
@@ -131,7 +135,7 @@ def create_changedbucketes_json():
 
         if log_active:
             if tarefas_movidas:
-                logger.info(f"{len(tarefas_movidas)} tarefa(s) mudaram de bucket. Resultado salvo em {moved_path}.")
+                logger.warning(f"{len(tarefas_movidas)} tarefa(s) mudaram de bucket. Resultado salvo em {moved_path}.")
             else:
                 logger.info("Nenhuma tarefa mudou de bucket.")
     except Exception:
@@ -153,7 +157,7 @@ def create_tasksnew_json():
 
         if log_active:
             if tarefas_novas:
-                logger.info(f"{len(tarefas_novas)} tarefa(s) novas que não estão em {excel_path}. Resultado salvo em {new_path}.")
+                logger.warning(f"{len(tarefas_novas)} tarefa(s) novas que não estão em {excel_path}. Resultado salvo em {new_path}.")
             else:
                 logger.info("Nenhuma tarefa nova encontrada.")
     except Exception:
