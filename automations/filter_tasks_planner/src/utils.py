@@ -47,26 +47,30 @@ def setup_log():
         datefmt='%d/%m/%Y %H:%M:%S'
     )
 
+    fallback_used = False
+    fallback_path = Path.cwd() / "log"
+    fallback_path.mkdir(parents=True, exist_ok=True)
+    full_log_path = fallback_path / "FilterTasksPlanner.log"
+
     try:
-        # Verifica se o caminho é um diretório (sem extensão)
-        if log_path.suffix == "":
-            # Cria subdiretório 'log' e define o nome padrão do arquivo
-            log_dir = log_path / 'log'
-            log_dir.mkdir(parents=True, exist_ok=True)
-            full_log_path = log_dir / 'FilterTasksPlanner.log'
-        elif log_path.suffix == ".log":
-            # Se for um caminho de arquivo, cria diretório pai se necessário
+        if log_path.suffix == ".log":
+            # É um arquivo .log
             log_path.parent.mkdir(parents=True, exist_ok=True)
             full_log_path = log_path
+
+        elif log_path.suffix == "":
+            # É um diretório
+            full_log_path = log_path / "log" / "FilterTasksPlanner.log"
+            full_log_path.parent.mkdir(parents=True, exist_ok=True)
+
         else:
             raise ValueError(f"O caminho de log '{log_path}' deve ser um diretório ou um arquivo '.log'.")
 
         file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
 
     except (OSError, ValueError) as e:
-        fallback_path = Path("C:/Temp/FilterTasksPlanner")
-        fallback_path.mkdir(parents=True, exist_ok=True)
-        full_log_path = fallback_path / "filter_tasks_planner.log"
+        fallback_used = True
+        full_log_path = fallback_path / "FilterTasksPlanner.log"
         file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
         print(f"[AVISO] Não foi possível acessar o caminho de log em '{log_path}'. Usando fallback em '{full_log_path}'. Erro: {e}")
 
@@ -74,12 +78,10 @@ def setup_log():
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
-    # Log inicial
     logger.info("Logger configurado com sucesso.")
 
-    if str(full_log_path) != str(log_path):
+    if fallback_used:
         logger.warning(f"Arquivo de log redirecionado para '{full_log_path}' pois '{log_path}' não pôde ser acessado.")
-
 
 def verify_observe_schedule():
     global observe_schedule
