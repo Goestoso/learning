@@ -135,7 +135,7 @@ def create_changedbucketes_json():
 
         if log_active:
             if tarefas_movidas:
-                logger.info(f"{len(tarefas_movidas)} tarefa(s) mudaram de bucket. Resultado salvo em {moved_path}.")
+                logger.warning(f"{len(tarefas_movidas)} tarefa(s) mudaram de bucket. Resultado salvo em {moved_path}.")
             else:
                 logger.info("Nenhuma tarefa mudou de bucket.")
     except Exception:

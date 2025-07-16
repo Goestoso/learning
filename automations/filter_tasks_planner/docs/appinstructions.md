@@ -81,7 +81,7 @@ Após **finalizar** a execução, a seguinte mensagem será mostrada no terminal
 > Durante a execução do programa, caso o log esteja ativado, um arquivo `.log` será gerado. Podendo ser registrado as seguintes _flags_:
 
 - `INFO`: informação relacionada a alguma ação executada pelo programa. 
-- `WARNING`: avisos sobre eventos das alterações de comportamento e alertas relacionados a tarefas com valores estranhos.
+- `WARNING`: avisos sobre alterações no funcionamento da aplicação e sobre qualquer movimentação das tarefas.
 - `ERROR`: erros identificados durante a execução.
 ---
 
@@ -90,6 +90,8 @@ Após **finalizar** a execução, a seguinte mensagem será mostrada no terminal
 - 📥 Detecta tarefas novas que não estão na planilha de referência.
 
 - ⚠️ Atente-se às tarefas duplicadas pois elas podem indevidamente afetar o resultado dos filtros.
+
+- 2️⃣ Detecta tarefas duplicadas que estão na planilha de referência.
 
 - ⚠️ Atente-se às tarefas novas pois elas indicam que a planilha de referência está defasada.
 
