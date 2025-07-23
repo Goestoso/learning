@@ -1,13 +1,25 @@
 "Módulo de funções auxiliares do app Filter Tasks Planner"
 
-import json, yaml, traceback, logging
+import json, yaml, logging, sys, shutil
+from logging.handlers import MemoryHandler
 import pandas as pd
 from pathlib import Path
 
 # Variáveis globais
-config, json_path, excel_path, moved_path, new_path, log_path, tarefas_atuais, tarefas_antigas, option_new, option_moved, log_active, observe_schedule = [None for _ in range(12)]
-
+config = None
+json_path = None 
+excel_path = None 
+moved_path = None 
+new_path = None
+log_path = None
+tarefas_atuais = None 
+tarefas_antigas = None 
+option_new = None
+option_moved = None
+log_active = None
+observe_schedule = None
 logger = logging.getLogger("filter_tasks_planner")
+memory_log = None  # salvar referência para flush futuro
 
 def load_config(config_path: Path):
     global config
@@ -29,56 +41,109 @@ def set_configs():
         observe_schedule = int(config['observe']['schedule'])
         
     except KeyError as e:
-        print(f"Chave de configuração ausente: {e}")
-    except ValueError as e:
-        print(f"Valor inválido na configuração: {e}")
-    except TypeError as e:
-        print(f"Tipo inesperado na configuração: {e}")
-    except Exception as e:
-        print(f"Erro inesperado: {e}")
-        
-def setup_log():
-    if not log_active:
-        return
+        print("[ERRO] Configuração incompleta. Verifique se todas as chaves estão presentes.")
+        if log_active:
+            logger.error(f"Chave de configuração ausente: {e}")
 
+    except ValueError as e:
+        print("[ERRO] Valor inválido encontrado na configuração.")
+        if log_active:
+            logger.error(f"Valor inválido na configuração: {e}")
+
+    except TypeError as e:
+        print("[ERRO] Tipo de dado incorreto na configuração.")
+        if log_active:
+            logger.error(f"Tipo inesperado na configuração: {e}")
+
+    except Exception as e:
+        print("[ERRO] Falha ao carregar as configurações.")
+        if log_active:
+            logger.exception(f"Erro inesperado ao carregar configurações: {e}")
+        
+def setup_log_early():
+    """Cria um logger temporário antes do carregamento das configurações."""
+    global memory_log
     logger.setLevel(logging.INFO)
+
     formatter = logging.Formatter(
         '[%(asctime)s] %(levelname)s: %(message)s',
         datefmt='%d/%m/%Y %H:%M:%S'
     )
 
+    fallback_path = Path.cwd() / "temp"
+    fallback_path.mkdir(parents=True, exist_ok=True)
+    early_log_file = fallback_path / "FilterTasksPlanner_init.log"
+
+    file_handler = logging.FileHandler(early_log_file, encoding='utf-8')
+    file_handler.setFormatter(formatter)
+
+    memory_log = MemoryHandler(capacity=1000, flushLevel=logging.ERROR, target=file_handler)
+    logger.addHandler(memory_log)
+    
+def cleanup_log_early():
+    fallback_path = Path.cwd() / "temp"
+    if fallback_path.exists() and fallback_path.is_dir():
+        try:
+            shutil.rmtree(fallback_path)
+            if log_active:
+                logger.info(f"Diretório de log temporário '{fallback_path}' removido com sucesso.")
+        except Exception as e:
+            if log_active:
+                logger.warning(f"Falha ao remover diretório de log temporário '{fallback_path}': {e}")
+            print(f"\n[AVISO] Falha ao remover diretório de log temporário. Erro: {e}\n")
+        
+def setup_log_after():
+    """Cria um logger fixo (se log for ativado) após o carregamento das configurações."""
+    if not log_active:
+        return
+
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s: %(message)s',
+        datefmt='%d/%m/%Y %H:%M:%S'
+    )
+
+    fallback_used = False
+    fallback_path = Path.cwd() / "log"
+    fallback_path.mkdir(parents=True, exist_ok=True)
+    full_log_path = fallback_path / "FilterTasksPlanner.log"
+
     try:
-        # Verifica se o caminho é um diretório (sem extensão)
-        if log_path.suffix == "":
-            # Cria subdiretório 'log' e define o nome padrão do arquivo
-            log_dir = log_path / 'log'
-            log_dir.mkdir(parents=True, exist_ok=True)
-            full_log_path = log_dir / 'FilterTasksPlanner.log'
-        elif log_path.suffix == ".log":
-            # Se for um caminho de arquivo, cria diretório pai se necessário
+        if log_path.suffix == ".log":
+            # É um arquivo .log
             log_path.parent.mkdir(parents=True, exist_ok=True)
             full_log_path = log_path
+
+        elif log_path.suffix == "":
+            # É um diretório
+            full_log_path = log_path / "log" / "FilterTasksPlanner.log"
+            full_log_path.parent.mkdir(parents=True, exist_ok=True)
+
         else:
             raise ValueError(f"O caminho de log '{log_path}' deve ser um diretório ou um arquivo '.log'.")
 
         file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
 
     except (OSError, ValueError) as e:
-        fallback_path = Path("C:/Temp/FilterTasksPlanner")
-        fallback_path.mkdir(parents=True, exist_ok=True)
-        full_log_path = fallback_path / "filter_tasks_planner.log"
+        fallback_used = True
+        full_log_path = fallback_path / "FilterTasksPlanner.log"
         file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
-        print(f"[AVISO] Não foi possível acessar o caminho de log em '{log_path}'. Usando fallback em '{full_log_path}'. Erro: {e}")
+        print(f"\n[AVISO] Não foi possível acessar o caminho de log em '{log_path}'. Usando fallback em '{full_log_path}'. Erro: {e}\n")
 
-    # Aplica formatter e adiciona handler
+    # Substitui os handlers anteriores (inclusive o early logger)
+    for handler in logger.handlers[:]:
+        handler.close()          # Fecha o handler (libera o arquivo)
+        logger.removeHandler(handler)  # Remove o handler do logger 
+
+
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
-    # Log inicial
-    logger.info("Logger configurado com sucesso.")
-
-    if str(full_log_path) != str(log_path):
+    if fallback_used:
         logger.warning(f"Arquivo de log redirecionado para '{full_log_path}' pois '{log_path}' não pôde ser acessado.")
+    else:
+        logger.info(f"Logger configurado com sucesso em '{full_log_path}'.")
 
 
 def verify_observe_schedule():
@@ -88,39 +153,69 @@ def verify_observe_schedule():
         observe_schedule = 60
         
 def initialize(config_path):
-    load_config(config_path)
-    set_configs()
-    setup_log()
-    verify_observe_schedule()
-        
+    setup_log_early()
+
+    try:
+        load_config(config_path)
+        set_configs()
+        setup_log_after()  # Reconfigura destino do log
+        cleanup_log_early()
+        verify_observe_schedule()
+
+    except Exception as e:
+        logger.exception(f"Erro crítico durante a inicialização: {e}")
+        if memory_log:
+            memory_log.flush()
+            sys.exit(1)  # termina o programa com código 1
+
 def load_tasksplanner_json():
     global tarefas_atuais, tarefas_antigas
     try:
-        with open(json_path, 'r') as f:
+        # Leitura do JSON
+        with open(json_path, 'r', encoding='utf-8') as f:
             tarefas_json = json.load(f)
         tarefas_atuais = {t['id']: t['bucketId'] for t in tarefas_json['value']}
 
+        # Leitura do Excel
         df_antigo = pd.read_excel(excel_path)
-        if not {'Identificação da tarefa', 'ID do Bucket'}.issubset(df_antigo.columns):
-            raise ValueError("A planilha deve conter as colunas 'Identificação da tarefa' e 'ID do Bucket'.")
 
+        # Validação de colunas
+        colunas_esperadas = {'Identificação da tarefa', 'ID do Bucket'}
+        if not colunas_esperadas.issubset(df_antigo.columns):
+            raise ValueError(f"A planilha deve conter as colunas {colunas_esperadas}.")
+
+        # Verificação de duplicadas
         duplicados = df_antigo['Identificação da tarefa'][df_antigo['Identificação da tarefa'].duplicated()]
         if not duplicados.empty:
             logger.warning(f"Foram encontradas {duplicados.nunique()} tarefas duplicadas na planilha. IDs: {duplicados.unique().tolist()}")
-        
+
+        # Conversão para dicionário
         tarefas_antigas = dict(zip(df_antigo['Identificação da tarefa'], df_antigo['ID do Bucket']))
+
         if log_active:
-            logger.info(f"Conteúdo do arquivo {json_path} carregado com sucesso.")
+            logger.info(f"Conteúdo dos arquivos '{json_path}' e '{excel_path}' carregados com sucesso.")
+
+    except FileNotFoundError as fnf:
+        msg = f"Arquivo não encontrado: {fnf.filename}"
+        logger.error(msg) if log_active else print(f"[ERRO] {msg}")
+
+    except PermissionError as p:
+        msg = f"Permissão negada ao acessar o arquivo: {p.filename}"
+        logger.error(msg) if log_active else print(f"[ERRO] {msg}")
+
+    except json.JSONDecodeError as jde:
+        msg = f"Erro ao decodificar JSON: {jde.msg} (linha {jde.lineno}, coluna {jde.colno})"
+        logger.error(msg) if log_active else print(f"[ERRO] {msg}")
+
     except ValueError as v:
-        if log_active:
-            logger.error(str(v))
-        else:
-            print(str(v))
+        # Colunas ausentes ou outros valores inválidos
+        msg = f"Erro nos dados da planilha: {str(v)}"
+        logger.error(msg) if log_active else print(f"[ERRO] {msg}")
+
     except Exception as e:
-        if log_active:
-            logger.exception("Erro inesperado ao carregar JSON e Excel.")
-        else:
-            print(str(e))
+        msg = f"Erro inesperado ao carregar JSON e planilha: {str(e)}"
+        logger.exception(msg) if log_active else print(f"[ERRO] {msg}")
+
 
 def create_changedbucketes_json():
     try:
@@ -129,7 +224,12 @@ def create_changedbucketes_json():
             for id_tarefa, bucket_atual in tarefas_atuais.items()
             if tarefas_antigas.get(id_tarefa) != bucket_atual
         ]
+    except Exception as e:
+        msg = f"Erro ao comparar buckets das tarefas: {str(e)}"
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+        return
 
+    try:
         with open(moved_path, 'w', encoding='utf-8') as f_out:
             json.dump(tarefas_movidas, f_out, ensure_ascii=False, indent=4)
 
@@ -138,11 +238,18 @@ def create_changedbucketes_json():
                 logger.warning(f"{len(tarefas_movidas)} tarefa(s) mudaram de bucket. Resultado salvo em {moved_path}.")
             else:
                 logger.info("Nenhuma tarefa mudou de bucket.")
-    except Exception:
-        if log_active:
-            logger.exception("Erro ao salvar tarefas movidas.")
-        else:
-            print(traceback.format_exc())
+
+    except PermissionError as p:
+        msg = f"Permissão negada ao escrever em {moved_path}."
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+
+    except OSError as o:
+        msg = f"Erro de sistema ao salvar tarefas movidas: {str(o)}"
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+
+    except Exception as e:
+        msg = f"Erro inesperado ao salvar tarefas movidas: {str(e)}"
+        logger.exception(msg) if log_active else print(f"\n[ERRO] {msg}\n")
 
 def create_tasksnew_json():
     try:
@@ -151,7 +258,12 @@ def create_tasksnew_json():
             for id_tarefa in tarefas_atuais
             if tarefas_antigas.get(id_tarefa) is None
         ]
+    except Exception as e:
+        msg = f"Erro ao identificar novas tarefas: {str(e)}"
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+        return
 
+    try:
         with open(new_path, 'w', encoding='utf-8') as f_out:
             json.dump(tarefas_novas, f_out, ensure_ascii=False, indent=4)
 
@@ -160,8 +272,15 @@ def create_tasksnew_json():
                 logger.warning(f"{len(tarefas_novas)} tarefa(s) novas que não estão em {excel_path}. Resultado salvo em {new_path}.")
             else:
                 logger.info("Nenhuma tarefa nova encontrada.")
-    except Exception:
-        if log_active:
-            logger.exception("Erro ao salvar novas tarefas.")
-        else:
-            print(traceback.format_exc())
+
+    except PermissionError as p:
+        msg = f"Permissão negada ao escrever em {new_path}."
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+
+    except OSError as o:
+        msg = f"Erro de sistema ao salvar tarefas novas: {str(o)}"
+        logger.error(msg) if log_active else print(f"\n[ERRO] {msg}\n")
+
+    except Exception as e:
+        msg = f"Erro inesperado ao salvar tarefas novas: {str(e)}"
+        logger.exception(msg) if log_active else print(f"\n[ERRO] {msg}\n")

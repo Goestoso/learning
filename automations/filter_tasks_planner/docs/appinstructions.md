@@ -82,7 +82,10 @@ Após **finalizar** a execução, a seguinte mensagem será mostrada no terminal
 
 - `INFO`: informação relacionada a alguma ação executada pelo programa. 
 - `WARNING`: avisos sobre alterações no funcionamento da aplicação e sobre qualquer movimentação das tarefas.
-- `ERROR`: erros identificados durante a execução.
+- `ERROR`: erros identificados durante a execução ou inicialização.
+
+> ⚠️ Erros de inicialização sempre serão gravados num arquivo de log temporário localizado em `\temp\FilterTasksPlanner_init.log` independentemente do log estar ativado ou não.
+
 ---
 
 ## 💡 Funcionalidades
