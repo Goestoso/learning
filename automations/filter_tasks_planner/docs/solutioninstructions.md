@@ -118,15 +118,15 @@ A conexão File System permite que os fluxos interajam com arquivos locais ou em
 
 ## ✅ Checklist Final
 
-[] Solução importada com sucesso no Power Automate
+- ☐ Solução importada com sucesso no Power Automate
 
-[] Conexões (Planner e File System) configuradas
+- ☐ Conexões (Planner e File System) configuradas
 
-[] Gateway instalado e funcional
+- ☐ Gateway instalado e funcional
 
-[] `FilterTasksPlanner.exe` em execução
+- ☐ `FilterTasksPlanner.exe` em execução
 
-[] Teste completo realizado
+- ☐ Teste completo realizado
 
 ## 🕑 Histórico de alterações do documento
 
