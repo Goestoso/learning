@@ -51,8 +51,8 @@ O **Data Gateway** é necessário para permitir que o Power Automate acesse arqu
 
 1. Baixe o instalador: https://aka.ms/gatewayinstall
 2. Execute o instalador e conecte à sua conta Microsoft 365.
-3. Escolha "Modo padrão" e defina um nome de gateway.
-4. Após instalado, vá ao Power Automate > **Gateways** > Adicione seu gateway ao ambiente.
+3. Escolha **"Modo padrão"** e defina um nome de gateway.
+4. Após instalado, vá ao **Power Automate > Gateways > Adicione seu gateway ao ambiente**.
 5. Use esse gateway ao configurar a conexão File System.
 
 ---
@@ -62,11 +62,55 @@ A conexão File System permite que os fluxos interajam com arquivos locais ou em
 
 **Como configurar**:
 
-1. Vá em "**Dados**" > "**Conexões**" > **Nova conexão**.
-2. Busque por "File System" e selecione.
+1. Vá em **"Dados" > "Conexões" > Nova conexão**.
+2. Busque por **"File System"** e selecione.
 3. Insira as credenciais do Windows com acesso à pasta monitorada.
 4. Escolha o gateway configurado anteriormente.
 5. Teste a conexão e certifique-se que o fluxo consegue ler/escrever arquivos.
+
+<details>
+<summary>Autenticação do File System</summary>
+
+Ao configurar a conexão File System no Power Automate, é importante observar que o uso de **PIN do Windows** não é suportado durante a autenticação. A autenticação requer obrigatoriamente o uso da **senha da conta de usuário do Windows**, mesmo que você costume utilizar um PIN para fazer login na sua máquina.
+
+➡️ Se você estiver recebendo erros ao tentar autenticar sua conta na conexão File System, verifique se está utilizando a **senha correta da conta**, e **não o PIN numérico**.
+
+> **🔐 Como habilitar a senha tradicional do usuário no Windows**:
+
+1. **Abrir as Configurações**:
+
+- Pressione `Win + I` e vá para Contas > Opções de entrada.
+
+2. **Verifique se você já tem uma senha definida**:
+
+- Se estiver usando apenas o **PIN**, você verá a opção de adicionar uma senha.
+
+- Clique em **"Senha" > Adicionar** (se ainda não tiver), e defina uma senha forte.
+
+3. **Remover o PIN (opcional, mas recomendado para uso com Power Automate)**:
+
+- Ainda em **Opções de entrada**, vá até **"PIN (Windows Hello)"**.
+
+- Clique em **"Remover"**.
+
+- Você precisará confirmar sua senha para concluir.
+
+4. **Usar a senha como login padrão**:
+
+- Reinicie o computador.
+
+- Faça login com a senha, e não o **PIN**.
+
+- Agora você pode usar essa senha ao configurar a conexão File System no Power Automate.
+
+**ℹ️ Observações importantes**
+- O **PIN** é vinculado a métodos de autenticação local e não é aceito para conexões remotas (como as feitas pelo Power Automate via Gateway).
+
+- O Power Automate exige uma credencial válida de rede, e por isso é obrigatório usar **a senha da conta do Windows**.
+
+- Se sua conta estiver vinculada à conta Microsoft, você usará a senha da conta Microsoft.
+
+</details>
 
 ---
 
