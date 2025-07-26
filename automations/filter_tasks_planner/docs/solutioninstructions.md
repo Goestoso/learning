@@ -1,8 +1,10 @@
-# 🧾 Guia Prático – Filter Tasks Planner (Power Automate)
+# 🧾 Filter Tasks Planner Solution (Power Automate)
 
-Nome da Solução: `Filter Tasks Planner` 
-Versão: `1.6.2`  
-Última atualização: `25/07/2025`  
+**Nome da Solução**: `Filter Tasks Planner` 
+
+**Versão**: `1.6.2`  
+
+**Última atualização**: `25/07/2025`  
 
 ---
 
