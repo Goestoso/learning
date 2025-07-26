@@ -160,6 +160,8 @@ Ao configurar a conexão File System no Power Automate, é importante observar q
 - **Saída**: não se aplica.
 - **Observação**: Essa automação deve ser executada após exportar o plano do Planner, armazenar no OneDrive e criar a coluna `ID do Bucket`.
 
+---
+
 ## ✅ Checklist Final
 
 - ☐ Solução importada com sucesso no Power Automate
@@ -171,6 +173,8 @@ Ao configurar a conexão File System no Power Automate, é importante observar q
 - ☐ `FilterTasksPlanner.exe` em execução
 
 - ☐ Teste completo realizado
+
+---
 
 ## 🕑 Histórico de alterações do documento
 
