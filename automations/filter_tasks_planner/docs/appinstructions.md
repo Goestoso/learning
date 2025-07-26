@@ -106,6 +106,8 @@ Após **finalizar** a execução, a seguinte mensagem será mostrada no terminal
 
 - 🛑 Pode ser encerrado usando as teclas `Ctrl + C`.
 
+---
+
 ## 🕑 Histórico de alterações do documento
 
 - `22/07/2025`: criação do documento.
