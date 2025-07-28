@@ -13,13 +13,12 @@ Aqui você encontrará materiais para aprendizado e referência das seguintes li
 - Python
 
 📁 **Automações**\
-Esta seção contém scripts e programas voltados para automação de processos, visando otimizar tarefas repetitivas e melhorar a produtividade.
+Esta seção contém scripts e programas voltados para automação de processos, visando otimizar tarefas repetitivas e melhorar a produtividade:
+
+- Filter Tasks Planner 
 
 📁 **Jogos**\
 Uma coleção de jogos desenvolvidos para estudo e prática. Inicialmente, teremos projetos em Python, mas futuramente planejamos criar jogos mais robustos utilizando outras linguagens.
-
-📁 **Docs**\
-Um espeço dedicado a todos os documentos do projeto.
 
 ## 🚀 Tecnologias Utilizadas
 
