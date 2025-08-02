@@ -40,25 +40,35 @@ def set_configs():
         option_moved = bool(config['options']['tasks_moved'])
         observe_schedule = int(config['observe']['schedule'])
         
+        # Verificações específicas
+        for path in [json_path, excel_path, moved_path, new_path]:
+            if not path.exists():
+                raise FileNotFoundError(f"Arquivo obrigatório não encontrado: {path}")
+                
     except KeyError as e:
         print("[ERRO] Configuração incompleta. Verifique se todas as chaves estão presentes.")
-        if log_active:
-            logger.error(f"Chave de configuração ausente: {e}")
+        logger.error(f"Chave de configuração ausente: {e}")
+        raise
 
     except ValueError as e:
         print("[ERRO] Valor inválido encontrado na configuração.")
-        if log_active:
-            logger.error(f"Valor inválido na configuração: {e}")
+        logger.error(f"Valor inválido na configuração: {e}")
+        raise
 
     except TypeError as e:
         print("[ERRO] Tipo de dado incorreto na configuração.")
-        if log_active:
-            logger.error(f"Tipo inesperado na configuração: {e}")
+        logger.error(f"Tipo inesperado na configuração: {e}")
+        raise
+        
+    except FileNotFoundError as e:
+        print(f"[ERRO] {e}")
+        logger.error(str(e))
+        raise
 
     except Exception as e:
         print("[ERRO] Falha ao carregar as configurações.")
-        if log_active:
-            logger.exception(f"Erro inesperado ao carregar configurações: {e}")
+        logger.exception(f"Erro inesperado ao carregar configurações: {e}")
+        raise
         
 def setup_log_early():
     """Cria um logger temporário antes do carregamento das configurações."""
@@ -94,6 +104,12 @@ def cleanup_log_early():
         
 def setup_log_after():
     """Cria um logger fixo (se log for ativado) após o carregamento das configurações."""
+    
+    # Substitui os handlers anteriores (inclusive o early logger)
+    for handler in logger.handlers[:]:
+        handler.close()          # Fecha o handler (libera o arquivo)
+        logger.removeHandler(handler)  # Remove o handler do logger 
+    
     if not log_active:
         return
 
@@ -105,9 +121,6 @@ def setup_log_after():
     )
 
     fallback_used = False
-    fallback_path = Path.cwd() / "log"
-    fallback_path.mkdir(parents=True, exist_ok=True)
-    full_log_path = fallback_path / "FilterTasksPlanner.log"
 
     try:
         if log_path.suffix == ".log":
@@ -127,6 +140,8 @@ def setup_log_after():
 
     except (OSError, ValueError) as e:
         fallback_used = True
+        fallback_path = Path.cwd() / "log"
+        fallback_path.mkdir(parents=True, exist_ok=True)  # CRIA O DIRETÓRIO SÓ AQUI
         full_log_path = fallback_path / "FilterTasksPlanner.log"
         file_handler = logging.FileHandler(full_log_path, encoding='utf-8')
         print(f"\n[AVISO] Não foi possível acessar o caminho de log em '{log_path}'. Usando fallback em '{full_log_path}'. Erro: {e}\n")
@@ -135,7 +150,6 @@ def setup_log_after():
     for handler in logger.handlers[:]:
         handler.close()          # Fecha o handler (libera o arquivo)
         logger.removeHandler(handler)  # Remove o handler do logger 
-
 
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
@@ -146,12 +160,23 @@ def setup_log_after():
         logger.info(f"Logger configurado com sucesso em '{full_log_path}'.")
 
 
+
 def verify_observe_schedule():
     global observe_schedule
     if observe_schedule < 60:
         logger.warning("O intervalo de tempo escolhido para o agendamento é muito baixo. Portanto o valor de observe schedule será alterado para o mínimo suportado de 60 segundos.")
         observe_schedule = 60
         
+def cleanup_json_data():
+    for caminho in [moved_path, new_path]:
+        try:
+            with open(caminho, 'w', encoding='utf-8') as f:
+                json.dump([], f)
+            logger.info(f"Dados do arquivo {caminho} esvaziados com sucesso.")
+        except Exception as e:
+            if log_active:
+                logger.error(f"Não foi possível limpar o arquivo {caminho}. Erro: {e}")
+      
 def initialize(config_path):
     setup_log_early()
 
@@ -159,6 +184,7 @@ def initialize(config_path):
         load_config(config_path)
         set_configs()
         setup_log_after()  # Reconfigura destino do log
+        cleanup_json_data()
         cleanup_log_early()
         verify_observe_schedule()
 
@@ -222,7 +248,7 @@ def create_changedbucketes_json():
         tarefas_movidas = [
             {'id': id_tarefa}
             for id_tarefa, bucket_atual in tarefas_atuais.items()
-            if tarefas_antigas.get(id_tarefa) != bucket_atual
+            if id_tarefa in tarefas_antigas and tarefas_antigas[id_tarefa] != bucket_atual
         ]
     except Exception as e:
         msg = f"Erro ao comparar buckets das tarefas: {str(e)}"

@@ -2,9 +2,9 @@
 
 **Nome da Solução**: `Filter Tasks Planner` 
 
-**Versão**: `1.6.2`  
+**Versão**: `1.6.5`  
 
-**Última atualização**: `25/07/2025`  
+**Última atualização**: `01/08/2025`  
 
 ---
 
@@ -166,11 +166,15 @@ Ao configurar a conexão File System no Power Automate, é importante observar q
 
 - ☐ Solução importada com sucesso no Power Automate
 
-- ☐ Conexões (Planner e File System) configuradas
+- ☐ Customizações nas ações do Power Automate para o seu ambiente
+
+- ☐ Conexões (OneDrive, Excel, Office Users, Planner e File System) configuradas
 
 - ☐ Gateway instalado e funcional
 
 - ☐ `FilterTasksPlanner.exe` em execução
+
+- ☐ Automações do Power Automate ligadas
 
 - ☐ Teste completo realizado
 
@@ -179,3 +183,4 @@ Ao configurar a conexão File System no Power Automate, é importante observar q
 ## 🕑 Histórico de alterações do documento
 
 - `25/07/2025`: criação do documento.
+- `01/08/2025`: atualizando sumário do documento com a nova versão da solução: `1` é a versão **MAJOR** do FilterTasksPlanner, `6` é a quantidade de automações e `5` é a quantidade de conexões necessárias.

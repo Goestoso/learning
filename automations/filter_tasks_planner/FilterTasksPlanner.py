@@ -16,5 +16,6 @@ if __name__ == "__main__":
         main.run_scheduler(config_path)
     except KeyboardInterrupt:
         if utils.log_active:
+            utils.cleanup_json_data()
             utils.logger.warning("Programa encerrado pelo usuário com Ctrl+C.")
         print("🔹 Execução das tarefas agendadas do Filter Tasks Planner finalizada!\n")
