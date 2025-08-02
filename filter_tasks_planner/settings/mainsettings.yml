@@ -1,0 +1,21 @@
+# Configurações do Filter Tasks Planner
+app:
+    name: Filter Tasks Planner
+    version: 1.1.0
+
+observe:
+    schedule: 300 # segundos
+    file: C:\tmp\PowerAutomate\filter_tasks_planner\data\tasksplanner.json # arquivo para monitorar
+
+data:
+    tasks_excel: C:\tmp\PowerAutomate\filter_tasks_planner\data\Tasks Planner.xlsx
+    tasks_moved: C:\tmp\PowerAutomate\filter_tasks_planner\data\changedbuckets.json
+    tasks_new: C:\tmp\PowerAutomate\filter_tasks_planner\data\tasksnew.json
+
+options:
+    tasks_new: true
+    tasks_moved: true
+
+log:
+    active: true
+    path: C:\tmp\PowerAutomate\filter_tasks_planner
