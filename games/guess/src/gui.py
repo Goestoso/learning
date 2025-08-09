@@ -1,17 +1,17 @@
 #importando bibliotecas
-from  tkinter import Tk, Frame, Label, Button, Entry, messagebox, StringVar
+from  tkinter import Tk, Toplevel, Frame, Label, Button, Entry, messagebox, StringVar
 from src import utils
 
 #variáveis globais
 largura_janela = 340
 altura_janela = 160
 root = Tk()
+largura_tela = root.winfo_screenwidth()
+altura_tela = root.winfo_screenheight()
 
 def main_window():
     root.title("Artificial Guess")
     root.geometry()
-    largura_tela = root.winfo_screenwidth()
-    altura_tela = root.winfo_screenheight()
     posicaoX = (largura_tela - largura_janela) // 2
     posicaoY = (altura_tela - altura_janela) // 2
     root.resizable(False, False)
@@ -62,39 +62,112 @@ def loading_secret_word(): # função que mostra que uma nova palavra secreta es
     root.after(4000, lambda l=label, msg="🧍 Attention...",f=("Arial", 20): change_main_message(l, msg, f))
     root.after(8000, lambda l=label, msg="🚶 Get ready...",f=("Arial", 20): change_main_message(l, msg, f))
     root.after(12000, lambda l=label, msg="🏃 Go!",f=("Arial", 20): change_main_message(l, msg, f))
-    clear_root_window()    
+    root.after(16000, start_game)
     
 def start_game():
-    loading_secret_word()
-    utils.load_guessed_word()
-    guess_top_frame(' '.join(utils.guessed_word))
-    frame_center = Frame(root)
-    frame_center.pack(expand=True, fill="both")
-    input_guess = StringVar()
-    entry = Entry(frame_center, relief="groove", textvariable=input_guess)
-    entry.pack(expand=True, fill="both")
-    verify_button = Button(frame_center, text="🔎 Verify", command= lambda: guess_verify, cursor="hand2")
-    verify_button.pack(pady=5, padx=80, fill="x")
-
+    
     def guess_verify():
         utils.guessing(guess=input_guess.get())
-        if utils.win:   
-            messagebox.showinfo(title="🏆 Congratulations!", message="You guess the secret word!")
+        if  utils.attempts == 0:
+            show_defeat_popup()
+        elif utils.win:
+            update_secret_frame()   
+            show_victory_popup()
         elif utils.invalid:
             messagebox.showerror(title="🚨 Oops!", message=utils.invalid_msg)
         elif utils.good_letter:
             messagebox.showinfo(title="✅ Very good!", message=f'\nThe letter "{input_guess.get()}" is correct!')
+            update_secret_frame()
         elif utils.already_attempted:
-            messagebox.showinfo(title="👁️ Pay attention!", message=f'\nThe word or letter "{input_guess.get()}" has already been tried, try another guess!')
+            messagebox.showinfo(title="👁️ Pay attention!", message=f'\nThe word "{input_guess.get()}" has already been tried, try another guess!' if len(input_guess.get()) >= 2 else f'\nThe letter "{input_guess.get()}" has already been tried, try another guess!')
         elif utils.fail: 
             messagebox.showinfo(title="💪 Nice try!", message=f"Incorrect guess. Try again.\n Do you still have {utils.attempts} attempts.")
-        elif  utils.attempts == 0:
-            messagebox.showinfo(title="👾 Game over!",message=f'You lose! The word was: "{utils.secret_word}"')
         
     
-    def guess_top_frame(word:str):
-        frame_top = Frame(root)
-        frame_top.pack()
-        label = Label(frame_top, text=f"🔡 The secret word: {word}", font=("Arial", 16, "bold"))
-        label.pack(anchor="center")
+    def update_secret_frame():
+        word = ' '.join(utils.guessed_word)
+        font_size = 14 if len(word) < 20 else 12 if len(word) < 30 else 10
+        label.config(text=f"🔡 The secret word: {word}", font=("Arial", font_size, "bold"))
+        
+    clear_root_window()
+    utils.load_guessed_word()
+    word = ' '.join(utils.guessed_word)
+    frame_top = Frame(root)
+    frame_top.pack()
+    font_size = 14 if len(word) < 20 else 12 if len(word) < 30 else 10
+    label = Label(frame_top, text=f"🔡 The secret word: {word}", font=("Arial", font_size, "bold"))
+    label.pack(anchor="center")
+    frame_center = Frame(root)
+    frame_center.pack(expand=True, fill="both")
+    input_guess = StringVar()
+    entry = Entry(frame_center, textvariable=input_guess, font=("Arial", 18), relief="groove", width=30)  # Ajuste conforme o tamanho desejado
+    entry.pack(fill="x", padx=20, pady=10, ipady=8)
+    verify_button = Button(frame_center, text="🔎 Verify", command= guess_verify, cursor="hand2")
+    verify_button.pack(pady=5, padx=80, fill="x")
+    
+    def show_victory_popup():
+        trophy = r"""
+Congratulations! 
+
+You guessed the secret word!
+
+      '._==_==_=_.'     
+       ___________      
+      .-\:      /-.    
+     | (|:.     |) |    
+      '-|:.     |-'     
+        \::.    /      
+         '::. .'        
+           ) (          
+         _.' '._        
+        '-------'             
+"""
+
+        popup = Toplevel()
+        popup.title("🎉 Victory!")
+        posicaoX = (largura_tela - largura_janela) // 2
+        posicaoY = (altura_tela - altura_janela) // 2
+        popup.resizable(False, False)
+        popup.geometry(f"400x300+{posicaoX}+{posicaoY}")
+        
+        label = Label(popup, text=trophy, font=("Courier", 10), justify="left")
+        label.pack(padx=10, pady=10)
+
+    def show_defeat_popup():
+        hangman = rf"""
+        You lose! 
+
+        The word was: "{utils.secret_word}"
+
+        ███████████████████████████
+        ███████▀▀▀░░░░░░░▀▀▀███████
+        ████▀░░░░░░░░░░░░░░░░░▀████
+        ███│░░░░░░░░░░░░░░░░░░░│███
+        ██▌│░░░░░░░░░░░░░░░░░░░│▐██
+        ██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+        ██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+        ██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+        ██▌░│██████▌░░░▐██████│░▐██
+        ███░│▐███▀▀░░▄░░▀▀███▌│░███
+        ██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+        ██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+        ████▄─┘██▌░░░░░░░▐██└─▄████
+        █████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+        ████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+        █████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+        ███████▄░░░░░░░░░░░▄███████
+        ██████████▄▄▄▄▄▄▄██████████
+        ███████████████████████████        
+"""
+
+        popup = Toplevel()
+        popup.title("👾 Game Over!")
+        posicaoX = (largura_tela - largura_janela) // 2
+        posicaoY = (altura_tela - altura_janela) // 2
+        popup.resizable(False, False)
+        popup.geometry(f"400x400+{posicaoX}+{posicaoY}")
+        
+        label = Label(popup, text=hangman, font=("Courier", 10), justify="left")
+        label.pack(padx=10, pady=10)
+
         

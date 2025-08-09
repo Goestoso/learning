@@ -89,7 +89,7 @@ def guessing(guess:str): #função para as partidas do jogo
 
     elif not guess.isalpha():
         invalid = True
-        invalid_msg = "Error: Value invalid. Please, enter a letter!"
+        invalid_msg = "Error: Value invalid. Please, enter a letter or a word!"
 
     else:
         invalid = True
