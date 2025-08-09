@@ -1,10 +1,10 @@
 """"Arquivo Principal do jogo Guess"""
  
 #importando bibliotecas
-from src import main_menu, start_game, end_game
+from src.gui import main_window
+from src.utils import load_words
 
 def main(): #função principal do jogo
-    main_menu()
-    start_game()
-    end_game()
+    load_words()
+    main_window()
 

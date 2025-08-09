@@ -1,94 +1,103 @@
 """Arquivo de Funções Auxiliares do jogo Guess"""
 
 #importando bibliotecas
-import time, random
+import random
 from pathlib import Path
 
-words = list('')
-secret_word = ''
+words: list[str] = list()
+secret_word: str = ''
+guessed_word: str = ''
+attempted_letters : set = set() # conjunto para armazenar letras que já foram usadas
+attempted_words: set = set() # para palavras já usadas
+attempts: int = 6
+win: bool = False
+already_attempted: bool = False # flag para caso a palavra ou letra já ter sido testada
+fail: bool = False # Flag para caso não ter acertado a tentativa
+good_letter: bool = False # Flag para caso a letra estiver correta
+invalid: bool = False # Flag para tentativas inválidas
+invalid_msg: str = ""
 
 def load_words(): #carrega as palavras do arquivo words na lista words
+    global words
     base_dir = Path(__file__).resolve().parent.parent  # volta ao diretório raiz do projeto
     file_path = base_dir / 'data' / 'words.txt' #concatena com o diretório que contém o arquivo words
-    words = []
+    load_words = []
     try:
         with open(file_path, "r") as file:
-            words = [line.strip() for line in file.readlines()]
+            load_words = [line.strip() for line in file.readlines()]
     except Exception as error:
         print(f'Error: {error}')
         exit()
     
-    return words
+    words = load_words
 
-def loading_secret_word(): #função que mostra que uma nova palavra secreta está sendo carregada
-    print("\nLoading secret word...")
-    time.sleep(1)
-    print("3")
-    time.sleep(1)
-    print("2")
-    time.sleep(1)
-    print("1\n")
-    time.sleep(1)
-
-def start_game(): #função para as partidas do jogo
+def load_secret_word():
     global secret_word
-    #print(f'Palavra selecionada: {secret_word}\n')
-    # Mostrar a palavra com underscores
-    attempted_letters = set() #conjunto para armazenar letras que já foram usadas
-    attempted_words = set() #para palavras já usadas
+    secret_word = random.choice(words)
+    
+def load_guessed_word():
+    global guessed_word
     guessed_word = ['_'] * len(secret_word)
-    print(f'The secret word: {" ".join(guessed_word)}')
-    attempts = 6  # O jogador tem 6 tentativas
-    while attempts > 0:
-        guess = input("\nGuess a letter or the whole word: ").lower()
-        # Verificar se o jogador adivinhou a palavra inteira
-        if len(guess) == len(secret_word) and guess.isalpha():
-            if guess == secret_word:
-                win_or_lose(True)
-                break
-            elif guess in attempted_words:
-                print(f'\nThe word "{guess}" has already been tried, try another guess!')
-            else:
-                attempted_words.add(guess)
-                print("Incorrect guess. Try again.")
-                print(f"Do you still have {attempts} attempts.")
-                attempts -= 1
-        # Verificar se o jogador adivinhou uma letra
-        elif len(guess) == 1 and guess.isalpha():
-            if guess in attempted_letters:
-                print(f'\nThe letter "{guess}" has already been tried, try another guess!')
-            elif guess in secret_word:
-                print(f'\nThe letter "{guess}" is correct!')
-                attempted_letters.add(guess)
-                for i in range(len(secret_word)):
-                    if secret_word[i] == guess:
-                        guessed_word[i] = guess
-                if '_' not in guessed_word:
-                    win_or_lose(True)
-                    break
-            else:
-                attempted_letters.add(guess)
-                print(f'\nThe letter "{guess}" is not in th secret word.')
-                print(f"\nDo you still have {attempts} attempts.")
-                attempts -= 1
+    
+def guessing(guess:str): #função para as partidas do jogo
+    global guessed_word, attempted_letters, attempted_words, attempts, win, already_attempted, fail, good_letter, invalid, invalid_msg
+    
+    already_attempted, fail, good_letter, invalid = [False for _ in range(4)]
 
-        elif len(guess) >= 2:
-            print("Input just one letter or the whole word")
-            #attempts -= 1
-
-        elif not guess.isalpha():
-            print("Error: Value invalid. Please, enter a letter!")
-
+    #print(f'Palavra selecionada: {secret_word}\n')
+    #print(f'The secret word: {" ".join(guessed_word)}')
+    
+    guess.lower()
+    # Verificar se o jogador adivinhou a palavra inteira
+    if len(guess) == len(secret_word) and guess.isalpha():
+        if guess == secret_word: 
+            win = True
+            return
+        elif guess in attempted_words:  
+            already_attempted = True
+            return
         else:
-            print("Please, input a letter or a valid word.")
+            attempted_words.add(guess)
+            attempts -= 1
+            fail = True
+            return
+    # Verificar se o jogador adivinhou uma letra
+    elif len(guess) == 1 and guess.isalpha():
+        if guess in attempted_letters:
+            already_attempted = True
+            return
+        elif guess in secret_word:
+            attempted_letters.add(guess)
+            for i in range(len(secret_word)):
+                if secret_word[i] == guess:
+                    guessed_word[i] = guess
+            if '_' not in guessed_word:
+                win = True
+                return
+            good_letter = True
+            return 
+        else:
+            fail = True
+            attempted_letters.add(guess)
+            attempts -= 1
+            return          
 
-        print(f"\nThe word: {' '.join(guessed_word)}")
+    elif len(guess) >= 2:
+        invalid = True
+        invalid_msg = f"Input just one letter or the whole word"
+        return
 
-    if attempts == 0:
-        print(f'\nYou lose! The word was: "{secret_word}"')
-        win_or_lose(False)
+    elif not guess.isalpha():
+        invalid = True
+        invalid_msg = "Error: Value invalid. Please, enter a letter!"
 
-def main_menu(): #função de abertura do jogo
+    else:
+        invalid = True
+        invalid_msg = "Please, input a letter or a valid word."       
+        return
+    
+
+"""def main_menu(): #função de abertura do jogo
     print("*************************************")
     print("***********Welcome to Guess**********")
     print("*************************************")
@@ -114,7 +123,6 @@ def main_menu(): #função de abertura do jogo
             
     if option == 1:
         global words, secret_word
-        loading_secret_word()
         words = load_words()
         secret_word = random.choice(words)
         
@@ -143,9 +151,9 @@ def main_menu(): #função de abertura do jogo
         print("\n🔹 Good luck and have fun! 🚀\n")
         time.sleep(4)
         main_menu()
-        print("🔹 If you guess wrong, you lose a try.")
+        print("🔹 If you guess wrong, you lose a try.")"""
 
-def win_or_lose(win:bool):
+"""def win_or_lose(win:bool):
     if win:
         print("\nCongratulations! You guess the secret word!\n")
         print("      '._==_==_=_.'     ")
@@ -183,13 +191,12 @@ def end_game():
         print("\nWhat do you want to do? \n")
         close_or_again = input('Options: \n\n- Try again (type Again)\n\n- Go back to beginning (type Back)\n\nChoose an option: ').upper()
         if close_or_again == ("AGAIN"):
-            loading_secret_word()
             time.sleep(2)
             secret_word = random.choice(words)
-            start_game()
+            guessing()
         elif close_or_again == ("BACK"):
             print("\nReturning to the main menu...\n")
             time.sleep(1)
             main_menu()
         else:
-            print('Please, enter "Again" or "Back"\n ')
+            print('Please, enter "Again" or "Back"\n ')"""
