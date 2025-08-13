@@ -19,6 +19,15 @@ icon_path = os.path.join(base_path, "..", "assets", "lamp.ico")
 # Normaliza o caminho para o sistema operacional
 icon_path = os.path.normpath(icon_path)
 
+def show_error(message):
+    posicaoX = (largura_tela - largura_janela) // 2
+    posicaoY = (altura_tela - altura_janela) // 2
+    root.resizable(False, False)
+    root.geometry(f"{largura_janela}x{altura_janela}+{posicaoX}+{posicaoY}")
+    root.iconbitmap(icon_path)
+    root.withdraw()
+    messagebox.showerror("❌ Error", message)
+    root.destroy()
 
 def main_window():
     root.title("Artificial Guess")

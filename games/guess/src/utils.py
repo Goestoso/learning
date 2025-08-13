@@ -17,38 +17,35 @@ good_letter: bool = False # Flag para caso a letra estiver correta
 invalid: bool = False # Flag para tentativas inválidas
 invalid_msg: str = ""
 
-def load_words(): #carrega as palavras do arquivo words na lista words
+def load_words(): # carrega as palavras do arquivo words.txt
     global words
-    base_dir = Path(__file__).resolve().parent.parent  # volta ao diretório raiz do projeto
-    file_path = base_dir / 'data' / 'words.txt' #concatena com o diretório que contém o arquivo words
-    load_words = []
+    base_dir = Path(__file__).resolve().parent.parent
+    file_path = base_dir / 'data' / 'words.txt'
+    words = []
+
     try:
         with open(file_path, "r") as file:
-            load_words = [line.strip() for line in file.readlines()]
+            words = [line.strip() for line in file.readlines()]
     except Exception as error:
-        print(f'Error: {error}')
-        exit()
-    
-    words = load_words
+        return f"Error loading file: {file_path}\n\nDetails: {error}"
 
-def load_secret_word():
+    return None  # Nenhum erro
+
+def load_secret_word(): # carrega uma palavra secreta aleatória da lista words
     global secret_word, attempted_letters, attempted_words, attempts
     attempted_letters = set()
     attempted_words = set()
     attempts = 6
     secret_word = random.choice(words)
     
-def load_guessed_word():
+def load_guessed_word(): # carrega o valor inicial da palavra a ser advinhada
     global guessed_word
     guessed_word = ['_'] * len(secret_word)
     
-def guessing(guess:str): #função para as partidas do jogo
+def guessing(guess:str): # função para as partidas do jogo
     global guessed_word, attempted_letters, attempted_words, attempts, win, already_attempted, win, fail, good_letter, invalid, invalid_msg
     
     win, already_attempted, fail, good_letter, invalid = [False for _ in range(5)]
-
-    #print(f'Palavra selecionada: {secret_word}\n')
-    #print(f'The secret word: {" ".join(guessed_word)}')
     
     guess.lower()
     # Verificar se o jogador adivinhou a palavra inteira

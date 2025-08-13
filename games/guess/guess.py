@@ -2,5 +2,5 @@
 
 from src import main
 
-if(__name__ == "__main__"): #contexto de execução do programa
+if(__name__ == "__main__"): # contexto de execução do programa
     main()
