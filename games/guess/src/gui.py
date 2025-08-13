@@ -1,6 +1,7 @@
 #importando bibliotecas
 from  tkinter import Tk, Toplevel, Frame, Label, Button, Entry, messagebox, StringVar
 from src import utils
+import os
 
 #variáveis globais
 largura_janela = 400
@@ -9,13 +10,23 @@ root = Tk()
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
 
+# Caminho relativo do arquivo atual (gui.py)
+base_path = os.path.dirname(__file__)
+
+# Caminho completo até o ícone
+icon_path = os.path.join(base_path, "..", "assets", "lamp.ico")
+
+# Normaliza o caminho para o sistema operacional
+icon_path = os.path.normpath(icon_path)
+
+
 def main_window():
     root.title("Artificial Guess")
-    root.geometry()
     posicaoX = (largura_tela - largura_janela) // 2
     posicaoY = (altura_tela - altura_janela) // 2
     root.resizable(False, False)
     root.geometry(f"{largura_janela}x{altura_janela}+{posicaoX}+{posicaoY}")
+    root.iconbitmap(icon_path)
     label = show_main_message()
     root.after(5000, lambda l=label, msg="🤖 Created by Artificial",f=("Times", 20): change_main_message(l, msg, f))
     root.after(8000, clear_root_window)
@@ -125,6 +136,7 @@ def start_game():
         posicaoY = (altura_tela - altura_janela) // 2
         popup.resizable(False, False)
         popup.geometry(f"350x350+{posicaoX}+{posicaoY}")
+        popup.iconbitmap(icon_path)
         
         label = Label(popup, text=trophy, font=("Courier", 10), justify="left")
         label.pack(padx=10, pady=5)
@@ -166,6 +178,7 @@ def start_game():
         posicaoY = (altura_tela - altura_janela) // 2
         popup.resizable(False, False)
         popup.geometry(f"400x420+{posicaoX}+{posicaoY}")
+        popup.iconbitmap(icon_path)
         
         label = Label(popup, text=hangman, font=("Courier", 10), justify="left")
         label.pack(padx=10, pady=5)
