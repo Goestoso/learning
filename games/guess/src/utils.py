@@ -17,6 +17,16 @@ good_letter: bool = False # Flag para caso a letra estiver correta
 invalid: bool = False # Flag para tentativas inválidas
 invalid_msg: str = ""
 
+def get_icon_path():
+    base_dir = Path(__file__).resolve().parent.parent
+    icon_path = base_dir / 'assets' / 'lamp.ico'
+
+    if not icon_path.exists():
+        return None, f"Icon not found in: {icon_path}"
+    
+    return icon_path, None
+
+
 def load_words(): # carrega as palavras do arquivo words.txt
     global words
     base_dir = Path(__file__).resolve().parent.parent

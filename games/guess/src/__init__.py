@@ -2,6 +2,7 @@
 
 from . import utils
 from . import gui
+from . import logger
 from .main import main
 
 __version__ = "1.0.0"

@@ -29,7 +29,7 @@ def show_error(message):
     messagebox.showerror("❌ Error", message)
     root.destroy()
 
-def main_window():
+def main_window(icon_path):
     root.title("Artificial Guess")
     posicaoX = (largura_tela - largura_janela) // 2
     posicaoY = (altura_tela - altura_janela) // 2
