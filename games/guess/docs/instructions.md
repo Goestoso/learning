@@ -22,9 +22,9 @@ Adivinhar corretamente a palavra antes de acabar suas tentativas.
 
 Ao rodar o jogo, você verá um menu com 3 opções:
 
-1. **Start new game** - Inicia uma nova partida.
-2. **Quit** - Sai do jogo.
-3. **Help** - Exibe as instruções detalhadas.
+1. **▶ Start** - Inicia uma nova partida.
+2. **❓ Help** - Exibe as instruções detalhadas.
+3. **↩ Exit** - Sai do jogo.
 
 ---
 
@@ -42,10 +42,10 @@ Ao rodar o jogo, você verá um menu com 3 opções:
 
 ## 🔄 Opções pós-jogo
 
-Após o fim da partida, você poderá escolher:
+Após o fim da partida será mostrada a pergunta "Would you like to try again?", da qual você poderá escolher:
 
-- **Try again**: Jogar novamente com uma nova palavra.
-- **Back**: Voltar ao menu principal.
+- **Yes**: Jogar novamente com uma nova palavra.
+- **No**: Voltar ao menu principal.
 
 ---
 
@@ -71,23 +71,26 @@ Após o fim da partida, você poderá escolher:
 ## 📁 Estrutura atual do projeto
 
 ```
-/guess 
-├── src
-|    └── guess.py 
+/artificial-guess
+|
+├── assets 
+|    └── lamp.ico   # icon do jogo
 ├── data 
-|    └── words.txt
-└── docs
-     └── instructions.txt
+|    └── words.txt   # palavras que deverão ser advinhadas
+├── docs
+|     └── instructions.txt  
+└── guess  # executável do jogo
+
 ```
 
 > O arquivo `words.txt` deve conter uma lista de palavras, uma por linha, que serão usadas como palavras secretas.
 
 ## 🐍 Como executar
 
-No terminal, navegue até o diretório do arquivo `guess.py` e rode o seguinte comando:
+Basta clicar no programa `guess.exe` ou  executar via terminal o seguinte comando:
 
 ```
-python guess.py
+guess.exe
 ```
 
-> Certifique-se de estar usando Python 3 e de que o arquivo words.txt está no caminho correto (/data/words.txt).
+> Certifique-se de que os arquivos `words.txt` e `lamp.ico` estão no caminho correto (`/data/words.txt` e `/assets/lamp.ico`).
