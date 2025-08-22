@@ -3,13 +3,15 @@
 #importando bibliotecas
 import random
 from pathlib import Path
+from typing import Literal
 
 words: list[str] = list()
 secret_word: str = ''
 guessed_word: str = ''
 attempted_letters : set = set() # conjunto para armazenar letras que já foram usadas
 attempted_words: set = set() # para palavras já usadas
-attempts: int = 6
+attempts: int = 0
+level: Literal['Easy', 'Medium', 'Hard'] = 'Medium'
 win: bool = False
 already_attempted: bool = False # flag para caso a palavra ou letra já ter sido testada
 fail: bool = False # Flag para caso não ter acertado a tentativa
@@ -42,10 +44,9 @@ def load_words(): # carrega as palavras do arquivo words.txt
     return None  # Nenhum erro
 
 def load_secret_word(): # carrega uma palavra secreta aleatória da lista words
-    global secret_word, attempted_letters, attempted_words, attempts
+    global secret_word, attempted_letters, attempted_words
     attempted_letters = set()
     attempted_words = set()
-    attempts = 6
     secret_word = random.choice(words)
     
 def load_guessed_word(): # carrega o valor inicial da palavra a ser advinhada
