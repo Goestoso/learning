@@ -9,6 +9,8 @@ altura_janela = 150
 root = Tk()
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
+posicaoX = (largura_tela - largura_janela) // 2
+posicaoY = (altura_tela - altura_janela) // 2
 
 # Caminho relativo do arquivo atual (gui.py)
 base_path = os.path.dirname(__file__)
@@ -56,9 +58,9 @@ def menu_options():
     label.pack(anchor="center")
     frame_center = Frame(root)
     frame_center.pack(expand=True, fill="both")
-    button_start = Button(frame_center, text="▶ Start", command= loading_secret_word, cursor="hand2")
+    button_start = Button(frame_center, text="▶ Start", command= difficulty_options, cursor="hand2")
     button_start.pack(pady=5, padx=80, fill="x")
-    button_help = Button(frame_center, text="❓ Help", command= lambda: messagebox.showinfo("📜 Instructions for Guess Game 📜", "🔹 The goal is to guess the secret word chosen randomly.\n🔹 The word will be represented by underscores (_ _ _).\n🔹 You can guess one letter at a time or try to guess the full word.\n🔹 If the letter is in the word, it will be revealed in the correct positions.\n🕹️ The game ends when:\n        ✅ You correctly guess the word 🎉\n        ❌ You run out of tries and lose 😢\n🔹 Good luck and have fun! 🚀\n🔹 If you guess wrong, you lose a try."), cursor="hand2")
+    button_help = Button(frame_center, text="❓ Help", command= lambda: messagebox.showinfo("📜 Instructions for Guess Game 📜", "🔹 The goal is to guess the secret word chosen randomly.\n🔹 The word will be represented by underscores (_ _ _).\n🔹 You can guess one letter at a time or try to guess the full word.\n🔹 If the letter is in the word, it will be revealed in the correct positions.\n🕹️ The game ends when:\n        ✅ You correctly guess the word 🎉\n        ❌ You run out of tries and lose 😢\n🔹 Good luck and have fun! 🚀\n🔹 If you guess wrong, you lose a try. 📉\n 🔹 When you start a match you can choose the difficulty (hard, medium or easy) to define the number of attempts. ⚖️"), cursor="hand2")
     button_help.pack(pady=5, padx=80, fill="x")
     button_exit = Button(frame_center, text="↩ Exit", command= exit_game, cursor="hand2")
     button_exit.pack(pady=5, padx=80, fill="x")
@@ -74,6 +76,43 @@ def exit_game():
     clear_root_window()
     show_main_message("👋 See you later!")
     root.after(4000, root.destroy)
+    
+def difficulty_options():
+    clear_root_window()
+    root.withdraw()
+    options = Toplevel(root)
+    options.title("🧠 Difficulty options")
+    options.resizable(False, False)
+    options.geometry(f"350x200+{posicaoX}+{posicaoY}")
+    options.iconbitmap(icon_path)
+
+    label = Label(options, text="Choose the difficulty:", font=("Arial", 14, "bold"))
+    label.pack(pady=10)
+
+    def change_difficulty(level, attempts):
+        utils.level = level
+        utils.attempts = attempts
+        options.destroy()  # Remove a janela após escolha
+        root.deiconify()
+        loading_secret_word()
+        
+    def go_back_menu_options():
+        options.destroy()
+        root.deiconify()
+        menu_options()
+
+    Button(options, text="😄 Easy (12 attempts)", font=("Arial", 12), width=25,
+           command=lambda: change_difficulty("Easy", 12), cursor="hand2").pack(pady=5)
+
+    Button(options, text="😐 Medium (8 attempts)", font=("Arial", 12), width=25,
+           command=lambda: change_difficulty("Medium", 8), cursor="hand2").pack(pady=5)
+
+    Button(options, text="😈 Hard (4 attempts)", font=("Arial", 12), width=25,
+           command=lambda: change_difficulty("Hard", 4), cursor="hand2").pack(pady=5)
+    
+    options.protocol("WM_DELETE_WINDOW", lambda: go_back_menu_options())
+
+    
     
 def loading_secret_word(): # função que mostra que uma nova palavra secreta está sendo carregada
     clear_root_window()
@@ -139,10 +178,8 @@ def start_game():
     The secret word: {utils.secret_word}   
 """
 
-        popup = Toplevel()
+        popup = Toplevel(root)
         popup.title("🎉 Victory!")
-        posicaoX = (largura_tela - largura_janela) // 2
-        posicaoY = (altura_tela - altura_janela) // 2
         popup.resizable(False, False)
         popup.geometry(f"350x350+{posicaoX}+{posicaoY}")
         popup.iconbitmap(icon_path)
@@ -181,10 +218,8 @@ def start_game():
         ███████████████████████████        
 """
 
-        popup = Toplevel()
+        popup = Toplevel(root)
         popup.title("👾 Game Over!")
-        posicaoX = (largura_tela - largura_janela) // 2
-        posicaoY = (altura_tela - altura_janela) // 2
         popup.resizable(False, False)
         popup.geometry(f"400x420+{posicaoX}+{posicaoY}")
         popup.iconbitmap(icon_path)
@@ -226,8 +261,7 @@ def end_game(popup:Toplevel):
     try_again = messagebox.askyesno(title="🤔 What now?", message="Would you like to try again?")
     if try_again:
         clear_root_window()
-        root.deiconify()
-        loading_secret_word()
+        difficulty_options()
     else:
         clear_root_window()
         root.deiconify()

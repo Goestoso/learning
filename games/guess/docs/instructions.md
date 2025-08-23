@@ -28,7 +28,7 @@ Ao rodar o jogo, você verá um menu com 3 opções:
 
 ---
 
-## 📜 Instruções (exibidas ao escolher a opção 3)
+## 📜 Instruções (também são exibidas ao escolher a opção Help)
 
 - A palavra secreta será exibida como: `_ _ _ _`
 - Você pode tentar:
@@ -36,7 +36,10 @@ Ao rodar o jogo, você verá um menu com 3 opções:
   - A **palavra inteira** diretamente
 - Se acertar uma letra, ela será revelada nas posições corretas.
 - Se errar, perderá uma tentativa.
-- Você tem **6 tentativas** no total.
+- A quantidade de tentativas vai depender da dificuldade escolhida antes de iniciar a partida:
+  - **😄 Easy** concede **12 tentativas**
+  - **😐 Medium** concede **8 tentativas**
+  - **😈 Hard** concede **4 tentativas**
 
 ---
 
@@ -56,7 +59,7 @@ Após o fim da partida será mostrada a pergunta "Would you like to try again?",
 
 ## ❌ Condições de Derrota:
 
-- Utilizar todas as 6 tentativas sem descobrir a palavra.
+- Utilizar todas as tentativas sem descobrir a palavra.
 
 ---
 
