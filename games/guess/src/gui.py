@@ -60,7 +60,7 @@ def menu_options():
     frame_center.pack(expand=True, fill="both")
     button_start = Button(frame_center, text="▶ Start", command= difficulty_options, cursor="hand2")
     button_start.pack(pady=5, padx=80, fill="x")
-    button_help = Button(frame_center, text="❓ Help", command= lambda: messagebox.showinfo("📜 Instructions for Guess Game 📜", "🔹 The goal is to guess the secret word chosen randomly.\n🔹 The word will be represented by underscores (_ _ _).\n🔹 You can guess one letter at a time or try to guess the full word.\n🔹 If the letter is in the word, it will be revealed in the correct positions.\n🕹️ The game ends when:\n        ✅ You correctly guess the word 🎉\n        ❌ You run out of tries and lose 😢\n🔹 Good luck and have fun! 🚀\n🔹 If you guess wrong, you lose a try. 📉\n 🔹 When you start a match you can choose the difficulty (hard, medium or easy) to define the number of attempts. ⚖️"), cursor="hand2")
+    button_help = Button(frame_center, text="❓ Help", command= lambda: messagebox.showinfo("📜 Instructions for Guess Game 📜", '🔹 The goal is to guess the secret word chosen randomly.\n🔹 The word will be represented by underscores (_ _ _).\n🔹 You can guess one letter at a time or try to guess the full word.\n🔹 If the letter is in the word, it will be revealed in the correct positions.\n🕹️ The game ends when:\n        ✅ You correctly guess the word 🎉\n        ❌ You run out of tries and lose 😢\n🔹 Good luck and have fun! 🚀\n🔹 If you guess wrong, you lose a try. 📉\n 🔹 When you start a match you can choose the difficulty (hard, medium or easy) to define the number of attempts. ⚖️\n🔹 To give up the match, pause the game and click the "Give Up" button. 🏴'), cursor="hand2")
     button_help.pack(pady=5, padx=80, fill="x")
     button_exit = Button(frame_center, text="↩ Exit", command= exit_game, cursor="hand2")
     button_exit.pack(pady=5, padx=80, fill="x")
@@ -95,11 +95,6 @@ def difficulty_options():
         options.destroy()  # Remove a janela após escolha
         root.deiconify()
         loading_secret_word()
-        
-    def go_back_menu_options():
-        options.destroy()
-        root.deiconify()
-        menu_options()
 
     Button(options, text="😄 Easy (12 attempts)", font=("Arial", 12), width=25,
            command=lambda: change_difficulty("Easy", 12), cursor="hand2").pack(pady=5)
@@ -110,14 +105,19 @@ def difficulty_options():
     Button(options, text="😈 Hard (4 attempts)", font=("Arial", 12), width=25,
            command=lambda: change_difficulty("Hard", 4), cursor="hand2").pack(pady=5)
     
-    options.protocol("WM_DELETE_WINDOW", lambda: go_back_menu_options())
-
+    options.protocol("WM_DELETE_WINDOW", lambda: go_back_menu_options(options))
+    
+def go_back_menu_options(window:Toplevel):
+    clear_root_window()
+    window.destroy()
+    root.deiconify()
+    menu_options()
     
     
 def loading_secret_word(): # função que mostra que uma nova palavra secreta está sendo carregada
     clear_root_window()
     utils.load_secret_word()
-    label = show_main_message(msg="Loading secret word...")
+    label = show_main_message(msg="⌛ Loading secret word...")
     root.after(4000, lambda l=label, msg="🧍 Attention...",f=("Arial", 20): change_main_message(l, msg, f))
     root.after(8000, lambda l=label, msg="🚶 Get ready...",f=("Arial", 20): change_main_message(l, msg, f))
     root.after(12000, lambda l=label, msg="🏃 Go!",f=("Arial", 20): change_main_message(l, msg, f))
@@ -232,6 +232,68 @@ def start_game():
         
         popup.protocol("WM_DELETE_WINDOW", lambda: end_game(popup))
         popup.bind("<Return>", lambda event: end_game(popup))
+        
+    def pause():
+        popup = Toplevel(root)
+        popup.title("⏸️ Paused")
+        popup.resizable(False, False)
+        popup.geometry(f"550x250+{posicaoX}+{posicaoY}")
+        popup.iconbitmap(icon_path)
+        
+        # Torna a janela modal
+        popup.grab_set()       # Bloqueia interação com outras janelas
+        popup.transient(root) # Mantém a janela acima da principal
+        popup.focus_force()   # Foca automaticamente na janela de pause
+
+        # Label de tentativas no topo, centralizado
+        label_qt_attempts = Label(popup, text=f"🔢 Remaining attempts: {str(utils.attempts)}", font=("Arial", 14, "bold"))
+        label_qt_attempts.pack(pady=10)
+
+        # Preparar os textos
+        tried_words = ", ".join(utils.attempted_words)
+        tried_letters = ", ".join(utils.attempted_letters)
+
+        # Frame horizontal para os dois labels
+        info_frame = Frame(popup)
+        info_frame.pack(pady=10, fill="both", expand=True)
+
+        # Label de palavras à esquerda
+        label_tried_words = Label(
+            info_frame,
+            text=f"🔤 Words already tried:\n\n{tried_words}",
+            font=("Arial", 14, "bold"),
+            justify="left",
+            wraplength=240
+        )
+        label_tried_words.pack(side="left", padx=10, anchor="n")
+
+        # Separador central
+        separator = Frame(info_frame, width=2, bg="gray")
+        separator.pack(side="left", fill="y", padx=30)
+
+        # Label de letras à direita
+        label_tried_letters = Label(
+            info_frame,
+            text=f"🔡 Letters already tried:\n\n{tried_letters}",
+            font=("Arial", 14, "bold"),
+            justify="left",
+            wraplength=240
+        )
+        label_tried_letters.pack(side="left", padx=10, anchor="n")
+        
+        # Frame para os botões no rodapé
+        button_frame = Frame(popup)
+        button_frame.pack(pady=10)
+
+        # Botão "Give Up"
+        give_up_button = Button(button_frame, text="🏴 Give Up", font=("Arial", 10, "bold"),
+                                command=lambda: go_back_menu_options(popup), cursor="hand2", width=10)
+        give_up_button.pack(side="left", padx=10)
+
+        # Botão "Close"
+        close_button = Button(button_frame, text="✖️ Close", font=("Arial", 10, "bold"),
+                            command=lambda: popup.destroy(), cursor="hand2", width=10)
+        close_button.pack(side="left", padx=10)
 
     clear_root_window()
     utils.load_guessed_word()
@@ -250,8 +312,14 @@ def start_game():
     entry = Entry(frame_center, textvariable=input_guess, font=("Arial", 18), relief="groove", width=30)
     entry.pack(fill="x", padx=20, pady=10, ipady=8)
 
-    verify_button = Button(frame_center, text="🔎 Verify", command=guess_verify, cursor="hand2")
-    verify_button.pack(pady=5, padx=80, fill="x")
+    # Frame para os botões no rodapé
+    bottom_frame = Frame(root)
+    bottom_frame.pack(pady=10)
+
+    verify_button = Button(bottom_frame, text="🔎 Verify", command=guess_verify, cursor="hand2")
+    verify_button.pack(side="left", padx=10)
+    pause_button = Button(bottom_frame, text="⏸️ Pause", command=pause, cursor="hand2")
+    pause_button.pack(side="left", padx=10)
 
     # Faz o bind uma única vez
     entry.bind("<Return>", guess_verify)
