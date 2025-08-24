@@ -18,7 +18,9 @@ Esta seção contém scripts e programas voltados para automação de processos,
 - Filter Tasks Planner 
 
 📁 **Jogos**\
-Uma coleção de jogos desenvolvidos para estudo e prática. Inicialmente, teremos projetos em Python, mas futuramente planejamos criar jogos mais robustos utilizando outras linguagens.
+Uma coleção de jogos desenvolvidos para estudo e prática:
+
+- Guess
 
 ## 🚀 Tecnologias Utilizadas
 
