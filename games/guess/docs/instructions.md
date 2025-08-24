@@ -31,7 +31,7 @@ Ao rodar o jogo, você verá um menu com 3 opções:
 ## 📜 Instruções (também são exibidas ao escolher a opção Help)
 
 - A palavra secreta será exibida como: `_ _ _ _`
-- Você pode tentar:
+- Você pode tentar (usando o botão **🔎 Verify**):
   - Uma **letra** por vez
   - A **palavra inteira** diretamente
 - Se acertar uma letra, ela será revelada nas posições corretas.
@@ -40,7 +40,8 @@ Ao rodar o jogo, você verá um menu com 3 opções:
   - **😄 Easy** concede **12 tentativas**
   - **😐 Medium** concede **8 tentativas**
   - **😈 Hard** concede **4 tentativas**
-
+- Clique no botão **⏸️ Pause** para verificar quantas tentativas ainda restam mais as palavras e letras que já foram usadas.
+- Para desistir da partida, clique em **🏳️ Give Up** na tela do **⏸️ Paused** (disponível após clicar no botão **⏸️ Pause**).
 ---
 
 ## 🔄 Opções pós-jogo
