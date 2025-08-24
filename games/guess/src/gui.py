@@ -237,11 +237,16 @@ def start_game():
         popup = Toplevel(root)
         popup.title("⏸️ Paused")
         popup.resizable(False, False)
-        popup.geometry(f"500x200+{posicaoX}+{posicaoY}")
+        popup.geometry(f"550x250+{posicaoX}+{posicaoY}")
         popup.iconbitmap(icon_path)
+        
+        # Torna a janela modal
+        popup.grab_set()       # Bloqueia interação com outras janelas
+        popup.transient(root) # Mantém a janela acima da principal
+        popup.focus_force()   # Foca automaticamente na janela de pause
 
         # Label de tentativas no topo, centralizado
-        label_qt_attempts = Label(popup, text=f"🔢 Remaining attempts: {str(utils.attempts)}", font=("Arial", font_size, "bold"))
+        label_qt_attempts = Label(popup, text=f"🔢 Remaining attempts: {str(utils.attempts)}", font=("Arial", 14, "bold"))
         label_qt_attempts.pack(pady=10)
 
         # Preparar os textos
@@ -253,12 +258,28 @@ def start_game():
         info_frame.pack(pady=10, fill="both", expand=True)
 
         # Label de palavras à esquerda
-        label_tried_words = Label(info_frame, text=f"🔤 Words already tried:\n{tried_words}", font=("Arial", 14, "bold"), justify="left")
+        label_tried_words = Label(
+            info_frame,
+            text=f"🔤 Words already tried:\n\n{tried_words}",
+            font=("Arial", 14, "bold"),
+            justify="left",
+            wraplength=240
+        )
         label_tried_words.pack(side="left", padx=10, anchor="n")
 
+        # Separador central
+        separator = Frame(info_frame, width=2, bg="gray")
+        separator.pack(side="left", fill="y", padx=30)
+
         # Label de letras à direita
-        label_tried_letters = Label(info_frame, text=f"🔡 Letters already tried:\n{tried_letters}", font=("Arial", 14, "bold"), justify="left")
-        label_tried_letters.pack(side="right", padx=10, anchor="n")
+        label_tried_letters = Label(
+            info_frame,
+            text=f"🔡 Letters already tried:\n\n{tried_letters}",
+            font=("Arial", 14, "bold"),
+            justify="left",
+            wraplength=240
+        )
+        label_tried_letters.pack(side="left", padx=10, anchor="n")
         
         # Frame para os botões no rodapé
         button_frame = Frame(popup)
