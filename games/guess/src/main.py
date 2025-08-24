@@ -21,7 +21,7 @@ def main(): # funcao principal
         return
     
     if words_error:
-        show_error(words_error)
+        show_error(words_error, icon_path)
         log_error(words_error.replace('\n', ' '))
         return
     

@@ -1,7 +1,7 @@
 """Arquivo de Funções Auxiliares do jogo Guess"""
 
 #importando bibliotecas
-import random
+import random, sys
 from pathlib import Path
 from typing import Literal
 
@@ -20,7 +20,12 @@ invalid: bool = False # Flag para tentativas inválidas
 invalid_msg: str = ""
 
 def get_icon_path():
-    base_dir = Path(__file__).resolve().parent.parent
+    # Detecta se está rodando como executável empacotado
+    if getattr(sys, 'frozen', False):
+        base_dir = Path(sys._MEIPASS)  # Pasta temporária do PyInstaller
+    else:
+        base_dir = Path(__file__).resolve().parent.parent
+
     icon_path = base_dir / 'assets' / 'lamp.ico'
 
     if not icon_path.exists():
@@ -29,17 +34,18 @@ def get_icon_path():
     return icon_path, None
 
 
+
 def load_words(): # carrega as palavras do arquivo words.txt
     global words
-    base_dir = Path(__file__).resolve().parent.parent
-    file_path = base_dir / 'data' / 'words.txt'
+    base_path = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parent.parent
+    words_path = base_path / 'data' / 'words.txt'
     words = []
 
     try:
-        with open(file_path, "r") as file:
+        with open(words_path, "r") as file:
             words = [line.strip() for line in file.readlines()]
     except Exception as error:
-        return f"Error loading file: {file_path}\n\nDetails: {error}"
+        return f"Error loading file: {words_path}\n\nDetails: {error}"
 
     return None  # Nenhum erro
 

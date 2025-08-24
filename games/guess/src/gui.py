@@ -11,17 +11,9 @@ largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
 posicaoX = (largura_tela - largura_janela) // 2
 posicaoY = (altura_tela - altura_janela) // 2
+windows_icon_path = None
 
-# Caminho relativo do arquivo atual (gui.py)
-base_path = os.path.dirname(__file__)
-
-# Caminho completo até o ícone
-icon_path = os.path.join(base_path, "..", "assets", "lamp.ico")
-
-# Normaliza o caminho para o sistema operacional
-icon_path = os.path.normpath(icon_path)
-
-def show_error(message):
+def show_error(message, icon_path):
     posicaoX = (largura_tela - largura_janela) // 2
     posicaoY = (altura_tela - altura_janela) // 2
     root.resizable(False, False)
@@ -32,12 +24,14 @@ def show_error(message):
     root.destroy()
 
 def main_window(icon_path):
+    global windows_icon_path
+    windows_icon_path = icon_path
     root.title("Artificial Guess")
     posicaoX = (largura_tela - largura_janela) // 2
     posicaoY = (altura_tela - altura_janela) // 2
     root.resizable(False, False)
     root.geometry(f"{largura_janela}x{altura_janela}+{posicaoX}+{posicaoY}")
-    root.iconbitmap(icon_path)
+    root.iconbitmap(windows_icon_path)
     label = show_main_message()
     root.after(5000, lambda l=label, msg="🤖 Created by Artificial",f=("Times", 20): change_main_message(l, msg, f))
     root.after(8000, clear_root_window)
@@ -84,7 +78,7 @@ def difficulty_options():
     options.title("🧠 Difficulty options")
     options.resizable(False, False)
     options.geometry(f"350x200+{posicaoX}+{posicaoY}")
-    options.iconbitmap(icon_path)
+    options.iconbitmap(windows_icon_path)
 
     label = Label(options, text="Choose the difficulty:", font=("Arial", 14, "bold"))
     label.pack(pady=10)
@@ -182,7 +176,7 @@ def start_game():
         popup.title("🎉 Victory!")
         popup.resizable(False, False)
         popup.geometry(f"350x350+{posicaoX}+{posicaoY}")
-        popup.iconbitmap(icon_path)
+        popup.iconbitmap(windows_icon_path)
         
         label = Label(popup, text=trophy, font=("Courier", 10), justify="left")
         label.pack(padx=10, pady=5)
@@ -222,7 +216,7 @@ def start_game():
         popup.title("👾 Game Over!")
         popup.resizable(False, False)
         popup.geometry(f"400x420+{posicaoX}+{posicaoY}")
-        popup.iconbitmap(icon_path)
+        popup.iconbitmap(windows_icon_path)
         
         label = Label(popup, text=hangman, font=("Courier", 10), justify="left")
         label.pack(padx=10, pady=5)
@@ -238,7 +232,7 @@ def start_game():
         popup.title("⏸️ Paused")
         popup.resizable(False, False)
         popup.geometry(f"550x250+{posicaoX}+{posicaoY}")
-        popup.iconbitmap(icon_path)
+        popup.iconbitmap(windows_icon_path)
         
         # Torna a janela modal
         popup.grab_set()       # Bloqueia interação com outras janelas
