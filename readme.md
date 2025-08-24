@@ -26,7 +26,7 @@ Uma coleção de jogos desenvolvidos para estudo e prática:
 
 As principais tecnologias utilizadas no projeto incluem, mas não se limitam a:
 
-- Linguagens: Python;
+- Linguagens: Python, Jupyter Notebook;
 - Ferramentas: Git, Git Bash, PowerShell, VSCode, PyCharm.
 
 ## 📌 Como Contribuir
