@@ -77,12 +77,10 @@ Após o fim da partida será mostrada a pergunta "Would you like to try again?",
 ```
 /artificial-guess
 |
-├── assets 
-|    └── lamp.ico   # icon do jogo
 ├── data 
 |    └── words.txt   # palavras que deverão ser advinhadas
 ├── docs
-|     └── instructions.txt  
+|     └── instructions.txt  # instruções do jogo
 └── guess  # executável do jogo
 
 ```
@@ -97,4 +95,4 @@ Basta clicar no programa `guess.exe` ou  executar via terminal o seguinte comand
 guess.exe
 ```
 
-> Certifique-se de que os arquivos `words.txt` e `lamp.ico` estão no caminho correto (`/data/words.txt` e `/assets/lamp.ico`).
+> Certifique-se de que o arquivo `words.txt` está no caminho correto (`/data/words.txt`).
