@@ -9,6 +9,7 @@ console.log(firstName)
 var age, dateOfBirth, sex
 
 age = "5"
+age = 5
 sex = "Male"
 console.log(age)
 age = "6"
