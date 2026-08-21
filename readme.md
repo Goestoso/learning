@@ -11,6 +11,7 @@ Aqui você encontrará materiais para aprendizado e referência das seguintes li
 
 - Git
 - Python
+- JS (JavaScript) e TS (TypeScript)
 
 📁 **Automações**\
 Esta seção contém scripts e programas voltados para automação de processos, visando otimizar tarefas repetitivas e melhorar a produtividade:
@@ -26,7 +27,7 @@ Uma coleção de jogos desenvolvidos para estudo e prática:
 
 As principais tecnologias utilizadas no projeto incluem, mas não se limitam a:
 
-- Linguagens: Python, Jupyter Notebook;
+- Linguagens: JS, TS, Python, Jupyter Notebook;
 - Ferramentas: Git, Git Bash, PowerShell, VSCode, PyCharm.
 
 ## 📌 Como Contribuir
