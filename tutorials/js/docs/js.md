@@ -189,28 +189,6 @@ npx tsc --noEmit
 
 Alguns recursos TypeScript que exigem geração adicional de JavaScript podem não funcionar na execução direta. Para maior compatibilidade, prefira compilar com `tsc`.
 
-### TypeScript no Playwright
-
-O Playwright consegue transformar e executar arquivos TypeScript automaticamente:
-
-```sh
-npx playwright test
-```
-
-Porém, executar os testes não significa que todos os tipos foram verificados.
-
-Para verificar a tipagem do projeto:
-
-```sh
-npx tsc --noEmit
-```
-
-Depois, execute os testes:
-
-```sh
-npx playwright test
-```
-
 Assim, cada comando possui uma responsabilidade:
 
 | Comando               | Finalidade                                        |
@@ -219,8 +197,6 @@ Assim, cada comando possui uma responsabilidade:
 | `npx tsc`             | Verifica e compila TypeScript                     |
 | `node app.js`         | Executa o JavaScript compilado                    |
 | `node app.ts`         | Executa diretamente sintaxe TypeScript compatível |
-| `npx playwright test` | Executa os testes Playwright                      |
-
 
 ## 🛑 Como parar a execução do código JS?
 Se um código JS estiver em execução (por exemplo, um loop infinito ou uma tarefa longa), você pode interrompê-lo no terminal pressionando `Ctrl + C`.
