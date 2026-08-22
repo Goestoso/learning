@@ -1,5 +1,28 @@
 # Guia Rápido sobre Playwright com TypeScript
 
+## 📚 Pré-requisitos
+
+Antes de estudar este guia, é recomendável possuir conhecimentos básicos de:
+
+- JavaScript;
+- TypeScript;
+- Node.js;
+- npm e npx;
+- utilização do terminal.
+
+Em JavaScript e TypeScript, é especialmente útil conhecer:
+
+- variáveis e tipos de dados;
+- condicionais e loops;
+- funções tradicionais e arrow functions;
+- arrays e objetos;
+- classes;
+- `import` e `export`;
+- Promises;
+- `async` e `await`.
+
+> Não é necessário dominar todos esses assuntos para começar. Entretanto, compreender os fundamentos facilitará a leitura, a criação e a manutenção dos testes.
+
 ## 🎭 O que é Playwright?
 Playwright é uma ferramenta de código aberto desenvolvida pela Microsoft para automação de navegadores web.
 
