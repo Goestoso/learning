@@ -139,3 +139,58 @@ test('Reusing locators', async ({page}) => {
 
   await expect(emailInputField).toHaveValue('test@test.com')
 });
+
+test('Extracting values', async ({page}) => {
+  // extracting text
+  const basicFormSection = page.locator('nb-card', {hasText: 'Basic form'})
+  const submitButtonText = await basicFormSection.getByRole('button').textContent()
+  console.log(submitButtonText)
+  expect(submitButtonText).toEqual('Submit')
+
+  // extract multiple text values
+  const allRadioButtonValues = await page.locator('nb-radio').allTextContents()
+  console.log(allRadioButtonValues)
+  expect(allRadioButtonValues).toContain('Option 1')
+
+  // extract input field values
+  const emailField = basicFormSection.getByRole('textbox', {name: 'Email'})
+  await emailField.fill('test@test.com')
+  const emailFieldValue = await emailField.inputValue()
+  console.log(emailFieldValue)
+
+  // extract attribute value
+  const emailPlaceholder = await emailField.getAttribute('placeholder')
+  console.log(emailPlaceholder)
+});
+
+test('Assertions', async({page}) => {
+
+  const basicFormSectionButton = page.locator('nb-card', {hasText: 'Basic form'}).getByRole('button')
+
+  // Generic assertions
+  const value = 5
+
+  // Compare two regular JavaScript values using a generic, non-retrying assertion.
+  // toEqual() performs a deep equality comparison, so the assertion passes because both values are 5.
+  expect(value).toEqual(5)
+  
+  const submitButtonText = await basicFormSectionButton.textContent()
+  console.log(submitButtonText)
+
+  // Assert the text value that was previously extracted from the button.
+  // Because this is a generic assertion on a resolved value, Playwright does not retry it if the UI is still updating.
+  expect(submitButtonText).toEqual('Submit')
+
+  // Locator assertion
+  // Assert directly against the locator and wait until its text becomes "Submit" or the assertion times out.
+  // Locator assertions are preferred for dynamic UI elements because Playwright automatically retries them.
+  await expect(basicFormSectionButton).toHaveText('Submit')
+
+  // Soft assertion 
+  // Check the button text without stopping the test immediately if this assertion fails.
+  // The failure is recorded, and the test may continue running, but it will still be reported as failed at the end.
+  // Locator assertions return a Promise, so a soft locator assertion should normally also be awaited.
+  expect.soft(basicFormSectionButton).toHaveText('Submitt')
+  await basicFormSectionButton.click()
+
+});
