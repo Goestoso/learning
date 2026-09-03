@@ -1,39 +1,61 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
+import { step } from '../helpers/test-step-decorator';
+import { HelperBase } from './helper-base';
 
-export class NavigationPage {
+export class NavigationPage extends HelperBase {
 
-    readonly page: Page; //something that should only be consulted outside the class and only changed by the class itself.
+    //Locators in Page Objects - recommended by Playwright, but you can use you own approach too
+    readonly formLayoutsMenu: Locator;
+    readonly datePickerMenu: Locator;
+    readonly toasterMenu: Locator;
+    readonly tooltipMenu: Locator;
+    readonly smartTableMenu: Locator;
 
     // A constructor is a block of code that executes as a first thing when you initialize an object of a class
     //we need it pass the page instance to the class so we can use it in the methods of the class
     constructor(page: Page) {
-        this.page = page //this.page is the instance variable that will hold the page object passed to the constructor
+        super(page);
+        this.smartTableMenu = page.getByText('Smart Table')
+        this.formLayoutsMenu = page.getByText('Form Layouts')
+        this.datePickerMenu = page.getByText('Datepicker')
+        this.toasterMenu = page.getByText('Toastr')
+        this.tooltipMenu = page.getByText('Tooltip')
     }
 
+    @step
     async formLayoutsPage(){
         await this.selectGroupMenuItem('Forms') //you always use this. to access the instance variables and methods of the class
-        await this.page.getByText('Form Layouts').click()
+        await this.formLayoutsMenu.click()
+        await this.verifyBackgroundColorPage() //inherited from HelperBase class
     }
 
+    @step
     async datePickerPage(){
         await this.selectGroupMenuItem('Forms')
-        await this.page.getByText('Datepicker').click()
+        await this.datePickerMenu.click()
+        await this.verifyBackgroundColorPage()
     }
-    
+
+    @step
     async toasterPage(){
         await this.selectGroupMenuItem('Modal & Overlays')
-        await this.page.getByText('Toastr').click()
+        await this.toasterMenu.click()
+        await this.verifyBackgroundColorPage()
     }
 
+    @step
     async tooltipPage(){
         await this.selectGroupMenuItem('Modal & Overlays')
-        await this.page.getByText('Tooltip').click()
+        await this.tooltipMenu.click()
+        await this.verifyBackgroundColorPage()
 
     }
 
+    @step
     async smartTablePage(){
         await this.selectGroupMenuItem('Tables & Data')
-        await this.page.getByText('Smart Table').click()
+        await this.smartTableMenu.click()
+        await this.verifyBackgroundColorPage()
     }
 
     private async selectGroupMenuItem(groupMenuTitle: string) {
