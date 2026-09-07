@@ -1,16 +1,22 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://playground.bondaracademy.com/');
+    await page.goto('/'); //will use the baseURL configured in the playwright.config.ts
 });
 
 test.describe('Form Layouts page', () => {
+    //test.describe.configure({retries: 2}) //hardcoded retry
+
     test.beforeEach(async ({ page }) => {
         await page.getByText('Forms').click()
         await page.getByText('Form Layouts').click()
     });
 
-    test('Input fields', async ({ page }) => {
+    test('Input fields', async ({ page }, testInfo) => {
+        //if(testInfo.retry){ //if it is a retry
+            //clean test data
+        //}
+
         const usingTheGridEmailInput = page.locator('nb-card', { hasText: "Using the Grid" }).getByRole('textbox', { name: "Email" })
         //clear first and then fill the input value
         await usingTheGridEmailInput.fill('test@test.com')

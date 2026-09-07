@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://playground.bondaracademy.com/');
+    await page.goto('/'); //will use the baseURL configured in the playwright.config.ts
 })
 
 test.describe('test suite 1', () => {
