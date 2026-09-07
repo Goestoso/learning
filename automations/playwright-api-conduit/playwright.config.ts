@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -34,9 +35,18 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { 
+      name: 
+      'setup', 
+      testMatch: /.*\.setup\.ts/  /* Could be configured to run before all tests. */
+    },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+      storageState: path.join(__dirname, 'playwright/.auth/user.json'),  
+      },
+      dependencies: ['setup'],  /* Test setup will run before all tests that use chromium. */
     },
 
     {
