@@ -2,7 +2,7 @@ import { test } from '../fixture';
 import { faker } from '@faker-js/faker'; //to  generate random test data
 import * as path from 'node:path';
 
-test('Navigate to form layouts page', async ({ pom }) => {
+test('Navigate to form layouts page', {tag: '@smoke'}, async ({ pom }) => {
 
     await pom.navigateTo.formLayoutsPage()
     await pom.navigateTo.datePickerPage()

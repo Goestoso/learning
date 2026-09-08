@@ -43,12 +43,19 @@ export default defineConfig({
     /* Enable to record videos during tests (only work if the test is executed through the command line) */
     // video: 'on', 
   },
+  /* Configure projects global setup and teardown - executes before and after everything respectively */
+  //globalSetup: require.resolve('./global-setup.ts'),
+  //globalTeardown: require.resolve('./global-teardown.ts'),
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'page-object-tests',
       testMatch: '*page-objects.spec.ts'
+    },
+    {
+      name: 'mobile-test',
+      use: { ...devices['iPhone 17 Pro'] }
     },
     {
       name: 'chromium',
