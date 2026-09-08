@@ -4,9 +4,9 @@ import { defineConfig, devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(__dirname, process.env.TEST_ENV ? `.env.${process.env.TEST_ENV}` : '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -36,14 +36,27 @@ export default defineConfig({
     /* The actions timeout - by default it has no timeout */
     actionTimeout: 4000,
     /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: process.env.URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    /* Enable to record videos during tests (only work if the test is executed through the command line) */
+    // video: 'on', 
   },
+  /* Configure projects global setup and teardown - executes before and after everything respectively */
+  //globalSetup: require.resolve('./global-setup.ts'),
+  //globalTeardown: require.resolve('./global-teardown.ts'),
 
   /* Configure projects for major browsers */
   projects: [
+    {
+      name: 'page-object-tests',
+      testMatch: '*page-objects.spec.ts'
+    },
+    {
+      name: 'mobile-test',
+      use: { ...devices['iPhone 17 Pro'] }
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },

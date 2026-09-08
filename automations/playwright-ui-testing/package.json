@@ -3,13 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "po-test-chromium": "npx playwright test test-with-page-objects.spec.ts --project=chromium",
+    "po-test-chromium:qa": "cross-env TEST_ENV=qa npx playwright test test-with-page-objects.spec.ts --project=chromium",
+    "po-test-firefox": "npx playwright test test-with-page-objects.spec.ts --project=firefox",
+    "po-test-all": "npm run po-test-chromium && npm run po-test-firefox"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.4.2"
   }
 }

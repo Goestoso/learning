@@ -1,7 +1,7 @@
 import {expect, test} from '@playwright/test'
 
 test.beforeEach(async ({page}, testInfo) => {
-    await page.goto('https://playground.bondaracademy.com/');
+    await page.goto('/'); //will use the baseURL configured in the playwright.config.ts
     await page.getByText('Modal & Overlays').click();
     await page.getByText('Dialog').click();
     testInfo.setTimeout(testInfo.timeout + 3000) // Get the current timeout and increase it by three seconds.

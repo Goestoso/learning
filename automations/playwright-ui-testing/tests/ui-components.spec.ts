@@ -1,36 +1,42 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://playground.bondaracademy.com/');
+    await page.goto('/'); //will use the baseURL configured in the playwright.config.ts
 });
 
 test.describe('Form Layouts page', () => {
+    //test.describe.configure({retries: 2}) //hardcoded retry
+
     test.beforeEach(async ({ page }) => {
         await page.getByText('Forms').click()
         await page.getByText('Form Layouts').click()
     });
 
-    test('Input fields', async ({ page }) => {
+    test('Input fields', {tag: ['@smoke', '@fields']}, async ({ page }, testInfo) => {
+        //if(testInfo.retry){ //if it is a retry
+            //clean test data
+        //}
+
         const usingTheGridEmailInput = page.locator('nb-card', { hasText: "Using the Grid" }).getByRole('textbox', { name: "Email" })
         //clear first and then fill the input value
         await usingTheGridEmailInput.fill('test@test.com')
         //just clear the input value
         await usingTheGridEmailInput.clear()
         //simulates keyboard typing 
-        await usingTheGridEmailInput.pressSequentially('test2@test.com', { delay: 500 })
+        await usingTheGridEmailInput.pressSequentially('test2@test.com', { delay: 100 })
 
         //extract the value
         const inputValue = await usingTheGridEmailInput.inputValue()
 
         //assertions
         //full match
-        await expect(usingTheGridEmailInput).toHaveValue('test2@tes.com')
+        await expect(usingTheGridEmailInput).toHaveValue('test2@test.com')
         //partial match
         await expect(usingTheGridEmailInput).toHaveValue(/test.com/)
     });
 
 
-    test('radio buttons', async ({ page }) => {
+    test('radio buttons', {tag: ['@smoke', '@radio']},  async ({ page }) => {
         const usingTheGridForm = page.locator('nb-card', { hasText: "Using the Grid" })
 
         //forcing the click on the radio button disconsidering the validations of playwright
@@ -38,6 +44,7 @@ test.describe('Form Layouts page', () => {
         await usingTheGridForm.getByLabel('Option 1').check({ force: true })
         //most recommended
         await usingTheGridForm.getByRole('radio', { name: "Option 2" }).check({ force: true })
+        await expect(usingTheGridForm).toHaveScreenshot({maxDiffPixels:100})
 
         //dont confuse isChecked with assertion, like the example below:
         const radioStatus = await usingTheGridForm.getByRole('radio', { name: "Option 2" }).isChecked()
@@ -46,7 +53,7 @@ test.describe('Form Layouts page', () => {
 
         //instead of getting the status (true or false) you can do the assertion directly as showed below:
         expect(usingTheGridForm.getByRole('radio', { name: "Option 2" })).toBeChecked()
-        expect(usingTheGridForm.getByRole('radio', { name: "Option 1" })).not.toBeChecked()
+        await expect(usingTheGridForm.getByRole('radio', { name: "Option 1" })).not.toBeChecked()
     });
 
 });

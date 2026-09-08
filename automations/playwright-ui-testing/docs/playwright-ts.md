@@ -69,7 +69,7 @@ meu-projeto/
 └── playwright.config.ts
 ```
 
-## ▶️ Como executar testes com Playwirght?
+## ▶️ Como executar testes com Playwright?
 Para executar todos os testes:
 
 ```
@@ -141,6 +141,131 @@ npx playwright test tests/login.spec.ts -g "login válido"
 ```
 
 - 💡 O `-g` é ideal para uma execução temporária porque não exige alterar o código.
+
+## ⚡ Atalhos de comandos para o dia a dia
+
+Execute os comandos na pasta do projeto, onde estão o `package.json` e o `playwright.config.ts`. Os caminhos e títulos abaixo são exemplos: substitua pelos testes desejados. O valor de `--project` deve corresponder a um projeto definido na configuração.
+
+### Consulta rápida
+
+| Objetivo | Comando |
+| --- | --- |
+| Executar um teste pela linha do arquivo | `npx playwright test tests/login.spec.ts:15` |
+| Listar os testes selecionados sem executar | `npx playwright test --grep "@smoke" --list` |
+| Reexecutar as falhas da última execução | `npx playwright test --last-failed` |
+| Executar com apenas um worker | `npx playwright test --workers=1` |
+| Parar na primeira falha | `npx playwright test -x` |
+| Repetir cada teste cinco vezes | `npx playwright test --repeat-each=5` |
+| Permitir até duas novas tentativas após falhas | `npx playwright test --retries=2` |
+| Definir timeout de 60 segundos por teste | `npx playwright test --timeout=60000` |
+| Gravar trace durante a execução | `npx playwright test --trace=on` |
+| Abrir um trace gerado | `npx playwright show-trace test-results/caminho-do-teste/trace.zip` |
+| Gerar relatório HTML | `npx playwright test --reporter=html` |
+| Abrir o relatório HTML gerado | `npx playwright show-report` |
+| Consultar as opções da versão instalada | `npx playwright test --help` |
+
+O `--last-failed` depende do registro da execução anterior. Para abrir um trace, use o caminho real do arquivo `trace.zip` gerado.
+
+### Atualizar snapshots (snaps)
+
+Snapshots são referências esperadas usadas em comparações, como `toHaveScreenshot()` e `toMatchSnapshot()`. Quando a alteração for intencional, atualize as referências:
+
+```bash
+npx playwright test --update-snapshots
+```
+
+O atalho equivalente é `-u`. Para limitar a atualização a um arquivo e projeto:
+
+```bash
+npx playwright test tests/login.spec.ts --project=chromium -u
+```
+
+Também é possível combinar com um filtro pelo título:
+
+```bash
+npx playwright test tests/login.spec.ts --project=chromium --grep "login válido" -u
+```
+
+> Revise as diferenças antes de versionar os snapshots: a atualização passa a aceitar o resultado atual como referência. Para screenshots, mantenha o ambiente de geração consistente, pois navegador, sistema operacional e fontes podem alterar a imagem.
+
+### Executar por tags
+
+As tags começam com `@` e podem ser declaradas nos detalhes do teste:
+
+```ts
+import { test, expect } from "@playwright/test";
+
+test("deve abrir a página inicial", { tag: ["@smoke", "@regression"] }, async ({ page }) => {
+  await page.goto("https://example.com");
+  await expect(page).toHaveTitle(/Example/);
+});
+```
+
+Outra opção é incluir a tag no título, por exemplo: `test("@smoke deve abrir a página inicial", ...)`.
+
+```bash
+# Apenas testes com @smoke
+npx playwright test --grep "@smoke"
+
+# Testes com @smoke OU @regression
+npx playwright test --grep "@smoke|@regression"
+
+# Testes com @smoke E @regression
+npx playwright test --grep "(?=.*@smoke)(?=.*@regression)"
+
+# Excluir testes com @slow
+npx playwright test --grep-invert "@slow"
+
+# Combinar tag, exclusão, projeto e navegador visível
+npx playwright test --grep "@smoke" --grep-invert "@slow" --project=chromium --headed
+```
+
+`-g` é a forma curta de `--grep`. O filtro usa uma expressão regular e considera também o título completo e as tags; por isso, `@smoke` pode corresponder a `@smokeExtra`. Para exigir a tag completa, use `--grep '(^|\s)@smoke(\s|$)'`. Mantenha os padrões entre aspas para que o terminal não interprete caracteres como `|`.
+
+### Criar atalhos no `package.json`
+
+Adicione os atalhos desejados ao objeto `scripts`, preservando os scripts existentes. Este é um exemplo de configuração:
+
+```json
+{
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:chromium": "playwright test --project=chromium",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:update-snaps": "playwright test --update-snapshots",
+    "test:report": "playwright show-report"
+  }
+}
+```
+
+Dentro dos scripts, o npm encontra o executável local do Playwright; não é necessário escrever `npx`. Execute um atalho com `npm run nome-do-script`:
+
+```bash
+npm run test:smoke
+npm run test:ui
+npm run test:report
+```
+
+Para personalizar uma execução sem editar o script, coloque as opções extras **depois de `--`**. O npm encaminha esses argumentos ao comando:
+
+```bash
+npm run test:e2e -- tests/login.spec.ts --project=chromium --headed
+npm run test:smoke -- --project=firefox --workers=1
+npm run test:update-snaps -- tests/login.spec.ts --project=chromium
+```
+
+Por exemplo, `npm run test:smoke -- --project=firefox` executa `playwright test --grep @smoke --project=firefox`.
+
+Neste projeto, já existe o script `po-test-chromium`. Você pode usá-lo diretamente e acrescentar opções:
+
+```bash
+npm run po-test-chromium -- --headed
+npm run po-test-chromium -- --grep "login" --list
+```
+
+Referências: [CLI do Playwright](https://playwright.dev/docs/test-cli), [tags e filtros](https://playwright.dev/docs/test-annotations) e [comparações visuais e atualização de snapshots](https://playwright.dev/docs/test-snapshots).
 
 ## 🧪 Como criar o primeiro teste?
 
